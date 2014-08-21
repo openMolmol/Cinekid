@@ -74,10 +74,12 @@ void loop() {
  
   //cuelebraSequenceConditionals
  
+ 
+ //this conditionals make the secuence simulate to reach the max power trought the analog values
   if (sensorR >= 150){
-    delay1 = 15;
-    sensorB = 200;
-    sensorB2 = 150;
+    delay1 = 15; //speeed
+    sensorB = 200; //blue values first strip layer
+    sensorB2 = 150; //blue values second strip layer
  }else{
    delay1 = 100;
    sensorB= 50;
