@@ -1,0 +1,14 @@
+
+
+to find serial devices, at the terminal type: 
+
+ls /dev/tty.usb*
+
+to open a serial device directly, type: 
+
+screen DEVICENAME 115200
+
+ie
+
+screen /dev/tty.usbserial-A40139LZ 115200
+

@@ -1,0 +1,131 @@
+//controlling multiple fans with one muscle sensors
+
+
+/*-----( Import needed libraries )-----*/
+/*-----( Declare Constants )-----*/
+
+#define RELAY_ON 1
+#define RELAY_OFF 0
+/*-----( Declare objects )-----*/
+/*-----( Declare Variables )-----*/
+#define Relay_1  3  // Arduino Digital I/O pin number
+#define Relay_2  5
+
+
+const int analogInPin1 = A0;  // Analog input pin that the potentiometer is attached to
+const int analogOutPin1 = 8; // Analog output pin that the LED is attached to
+
+const int analogInPin2 = A1; //(R)
+const int analogOutPin2 = 10;
+
+int sensorValue1 = 0;        // value read from the pot
+int sensorValue2 = 0; 
+
+int outputValue1 = 0; 
+int outputValue2 = 0; 
+
+int min1, max1, min2, max2;
+bool bFirstTime = true;
+
+int relayTime = 100;
+
+ /****** SETUP: RUNS ONCE ******/
+void setup() {
+  //-------( Initialize Pins so relays are inactive at reset)----
+  digitalWrite(Relay_1, RELAY_OFF);
+  digitalWrite(Relay_2, RELAY_OFF);
+
+  //---( THEN set pins as outputs )----  
+  pinMode(Relay_1, OUTPUT); 
+  pinMode(Relay_2, OUTPUT);
+  
+  // initialize serial communications at 9600 bps:
+  Serial.begin(9600); 
+}//--(end setup )---
+
+
+ /****** LOOP: RUNS CONSTANTLY ******/
+void loop() {
+  
+ 
+  
+  // read the analog in value:
+  sensorValue1 = analogRead(analogInPin1);    
+  sensorValue2 = analogRead(analogInPin2);    
+   
+   if (millis() < 4000){
+     if (bFirstTime){
+       bFirstTime = false;
+       min1 = sensorValue1;
+       max1 = sensorValue1;
+       min2 = sensorValue2;
+       max2 = sensorValue2;
+     }
+     
+    min1 = min(min1, sensorValue1);
+    max1 = max(max1, sensorValue1);
+    min2 = min(min2, sensorValue2);
+    max2 = max(max2, sensorValue2);
+    
+  }
+  
+  
+  // map it to the range of the analog out:
+  outputValue1 = map(sensorValue1, min1, max1, 0, 255);  
+  outputValue2 = map(sensorValue2, min2, max2, 0, 255);  
+
+  if (outputValue2 < 0) outputValue2 = 0;
+  if (outputValue2 > 255) outputValue2 = 255;
+
+ Serial.print(sensorValue1);
+  Serial.print(" ");
+  Serial.println(sensorValue2);
+ 
+
+  analogWrite(analogOutPin1, outputValue1); 
+  analogWrite(analogOutPin2, outputValue2);    
+
+
+//  int analog = map(sensorValue1,10,300,0,255 ;
+//  if (analog < 200) analog = 200;
+  int val1 = map(sensorValue1, 10, 200, 0, 255); 
+if (val1 < 0) val1 = 0;
+if (val1 > 255) val1 = 255;
+
+  int val2 = map(sensorValue2, 10, 200, 0, 255); 
+  if (val2 < 0) val2 = 0;
+if (val2 > 255) val2 = 255;
+  
+
+//---( Turn relays OFF)---
+int off1 =  floor(((255-(float)outputValue1)/255.0) * relayTime);
+int on1 =  floor(( ((float)outputValue1)/255.0) * relayTime);
+
+int off2 =  floor(((255-(float)outputValue2)/255.0) * relayTime);
+int on2 =  floor(( ((float)outputValue2)/255.0) * relayTime);
+
+  int time = millis() % relayTime;
+  
+/*  if (time <= off1){ 
+    digitalWrite(Relay_1, RELAY_OFF);// set the Relay OFF
+  } else {
+    digitalWrite(Relay_1, RELAY_ON);
+  }
+  
+  */
+  
+  if (time <= off2){ 
+    
+    
+    digitalWrite(Relay_2, RELAY_OFF);// set the Relay OFF
+    digitalWrite(Relay_1, RELAY_OFF);// set the Relay OFF
+  } else {
+    digitalWrite(Relay_2, RELAY_ON);
+     digitalWrite(Relay_1, RELAY_ON);
+  }
+     
+  delay(2);   
+                     
+  Serial.println(off2);   
+  
+}//--(end main loop )---

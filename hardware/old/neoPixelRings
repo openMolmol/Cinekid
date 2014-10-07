@@ -1,0 +1,298 @@
+#include <Adafruit_NeoPixel.h>
+
+#define PIN 1
+
+// Parameter 1 = number of pixels in strip
+// Parameter 2 = Arduino pin number (most are valid)
+// Parameter 3 = pixel type flags, add together as needed:
+//   NEO_KHZ800  800 KHz bitstream (most NeoPixel products w/WS2812 LEDs)
+//   NEO_KHZ400  400 KHz (classic 'v1' (not v2) FLORA pixels, WS2811 drivers)
+//   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
+//   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, PIN, NEO_GRB + NEO_KHZ800);
+
+//RandomSequence
+uint8_t myFavoriteColors[][5] = {{200,   0, 200},   
+                                 {0,   117,   255},    
+                                 {200, 200, 200},  
+                                 {0,255,90},
+                                 {255,140,0},
+                            
+                               };
+                               
+#define FAVCOLORS sizeof(myFavoriteColors) / 5
+
+//reset
+
+int resetB = 13;
+int reset = 1;
+int   sensorB =50;
+int delay1 = 100;
+int range = 2;
+
+//culebraSequence
+int sensorG = 0;
+int sensorB2= 200;
+int sine[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,27,26,25,24,23,22,21,20,19,18,17,16,28,29,30,31,32,33,34,35,36,38,39}; //declareLeds
+int timerCulebra = 0;
+
+
+void setup() {
+   strip.begin();
+   strip.show(); 
+   Serial.begin(9600);
+   pinMode(resetB, OUTPUT);  
+   pinMode(reset,INPUT);
+}
+
+
+//reset
+void(* resetFunc) (void) = 0; 
+
+
+void loop() {
+
+   
+  //reset
+  int sensorValue = digitalRead(3);
+  Serial.println(sensorValue);
+  
+  if(sensorValue == 1){
+   range = 4;
+   
+  }
+  
+  
+
+ //analogSensor
+  int analogValue = analogRead(A0); 
+  float sensorFR = analogValue * (15.0 / 1023.0);  //send analog values to randomSquence
+  float sensorR = analogValue * (255.0 / 1023.0);  //send analog values to rgb R
+ float  sensorV = map(analogValue,0,1023,10,0);  //send analog values to rainbowSequence speed
+
+ Serial.println(sensorR);
+ 
+  //cuelebraSequenceConditionals
+ 
+ 
+ //this conditionals make the secuence simulate to reach the max power trought the analog values, colors and speed
+  if (sensorR >= 150){
+    delay1 = 15; //speeed
+    sensorB = 200; //blue values first strip layer
+    sensorB2 = 150; //blue values second strip layer
+ }else{
+   delay1 = 100;
+   sensorB= 50;
+   sensorB2 = 200; 
+  }
+   if (sensorR >= 220){
+     timerCulebra ++;
+     delay1 = 10;
+     sensorB = 255;
+    sensorB2 = 0;
+ }else{
+     timerCulebra = 0;
+     delay1 = 100;
+     sensorB = 50;
+     sensorB2 = 150;
+ }
+ 
+ if (timerCulebra >= 10){
+   
+   delay1 = 5;
+   
+ }else{
+  
+ timerCulebra = 0;
+  
+}
+ 
+  
+
+switch (range) {
+  
+
+
+     
+     //culebraSecuence
+  case 1:   
+   for(int i=0; i<39; i++) { 
+     
+      strip.setPixelColor(sine[i], strip.Color(0, 150, sensorB)); 
+      delay(delay1);
+      for (int j=0; j<25; j++){
+        strip.setPixelColor(sine[(j+i+4)%39], strip.Color(sensorR, sensorG, sensorB2));
+        }
+  
+      strip.show(); 
+      }    
+   
+   
+   
+    break;
+
+//randomSecuence
+  case 2:   
+  flashRandom(22, 39); 
+    flashRandom(22, sensorFR); 
+    flashRandom(22, 39);
+  
+    break;
+  
+  //stanby2
+  case 3:    
+    rainbowCycle(sensorV);
+    break;
+  
+  
+  //reset
+   case 4:
+   
+    digitalWrite(resetB, HIGH);  
+
+    delay(1000);               
+
+    digitalWrite(resetB, LOW);    
+
+    delay(1000);               
+    resetFunc();  
+  
+    delay(100);
+
+     break;
+//calibrationSecuence
+
+case 5:
+    theaterChaseRainbow(60);
+    colorWipe(strip.Color(255, 0, 0), 10);
+    colorWipe(strip.Color(0, 0, 255), 10); 
+     
+   break;
+
+
+}
+
+  
+}
+////Adafruit-Neopixel library- functions////////
+
+// Fill the dots one after the other with a color
+void colorWipe(uint32_t c, uint8_t wait) {
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+      strip.setPixelColor(i, c);
+      strip.show();
+      delay(wait);
+  }
+}
+
+
+void rainbow(uint8_t wait) {
+  uint16_t i, j;
+
+  for(j=0; j<256; j++) {
+    for(i=0; i<strip.numPixels(); i++) {
+      strip.setPixelColor(i, Wheel((i+j) & 255));
+    }
+    strip.show();
+    delay(wait);
+  }
+}
+
+// Slightly different, this makes the rainbow equally distributed throughout
+void rainbowCycle(uint8_t wait) {
+  uint16_t i, j;
+
+  for(j=0; j<256*5; j++) { // 5 cycles of all colors on wheel
+    for(i=0; i< strip.numPixels(); i++) {
+      strip.setPixelColor(i, Wheel(((i * 256 / strip.numPixels()) + j) & 255));
+    }
+    strip.show();
+    delay(wait);
+  }
+}
+
+//Theatre-style crawling lights.
+void theaterChase(uint32_t c, uint8_t wait) {
+  for (int j=0; j<10; j++) {  //do 10 cycles of chasing
+    for (int q=0; q < 3; q++) {
+      for (int i=0; i < strip.numPixels(); i=i+3) {
+        strip.setPixelColor(i+q, c);    //turn every third pixel on
+      }
+      strip.show();
+     
+      delay(wait);
+     
+      for (int i=0; i < strip.numPixels(); i=i+3) {
+        strip.setPixelColor(i+q, 0);        //turn every third pixel off
+      }
+    }
+  }
+}
+
+//Theatre-style crawling lights with rainbow effect
+void theaterChaseRainbow(uint8_t wait) {
+  for (int j=0; j < 50; j++) {     // cycle all 256 colors in the wheel
+    for (int q=0; q < 3; q++) {
+        for (int i=0; i < strip.numPixels(); i=i+3) {
+          strip.setPixelColor(i+q, Wheel( (i+j) % 50));    //turn every third pixel on
+        }
+        strip.show();
+       
+        delay(wait);
+       
+        for (int i=0; i < strip.numPixels(); i=i+3) {
+          strip.setPixelColor(i+q, 0);        //turn every third pixel off
+        }
+    }
+  }
+}
+
+// Input a value 0 to 255 to get a color value.
+// The colours are a transition r - g - b - back to r.
+uint32_t Wheel(byte WheelPos) {
+  if(WheelPos < 85) {
+   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+  } else if(WheelPos < 170) {
+   WheelPos -= 85;
+   return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  } else {
+   WheelPos -= 170;
+   return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  }
+}
+void flashRandom(int wait, uint8_t howmany) {
+ 
+  for(uint16_t i=0; i<howmany; i++) {
+    // pick a random favorite color!
+    int c = random(FAVCOLORS);
+    int red = myFavoriteColors[c][0];
+    int green = myFavoriteColors[c][1];
+    int blue = myFavoriteColors[c][2]; 
+ 
+    // get a random pixel from the list
+    int j = random(strip.numPixels());
+    //Serial.print("Lighting up "); Serial.println(j); 
+    
+    // now we will 'fade' it in 5 steps
+    for (int x=0; x < 5; x++) {
+      int r = red * (x+1); r /= 5;
+      int g = green * (x+1); g /= 5;
+      int b = blue * (x+1); b /= 5;
+      
+      strip.setPixelColor(j, strip.Color(r, g, b));
+      strip.show();
+      delay(wait);
+    }
+    // & fade out in 5 steps
+    for (int x=5; x >= 0; x--) {
+      int r = red * x; r /= 5;
+      int g = green * x; g /= 5;
+      int b = blue * x; b /= 5;
+      
+      strip.setPixelColor(j, strip.Color(r, g, b));
+      strip.show();
+      delay(wait);
+    }
+  }
+ 
+}
