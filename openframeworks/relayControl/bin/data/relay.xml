@@ -1,0 +1,29 @@
+<relayControl>
+	<deviceId>tty.usbmodem1411</deviceId>
+	<pins>
+		<pin>
+			<num>6</num>
+			<flipOnOff>true</flipOnOff>
+            <defaultState>false</defaultState>
+		</pin>
+		<pin>
+			<num>9</num>
+			<flipOnOff>true</flipOnOff>
+            <defaultState>false</defaultState>
+		</pin>
+		<pin>
+			<num>11</num>
+			<flipOnOff>true</flipOnOff>
+            <defaultState>false</defaultState>
+		</pin>
+        <pin>
+			<num>4</num>
+			<flipOnOff>true</flipOnOff>
+            <defaultState>false</defaultState>
+		</pin>
+        
+        
+	</pins>
+</relayControl>
+
+		
