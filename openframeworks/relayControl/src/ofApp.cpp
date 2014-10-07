@@ -88,7 +88,7 @@ void ofApp::update(){
         ofxOscMessage m;
 		receiver.getNextMessage(&m);
         if(m.getAddress() == "/strength");
-        int strength = m.getArgAsFloat(0);
+        float strength = m.getArgAsFloat(0);
         
         if (useOsc == true){
             for (int i = 0; i < relayPins.size(); i++){

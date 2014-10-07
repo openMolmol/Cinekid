@@ -4,8 +4,15 @@
 #include "dataCollector.h"
 #include "ofxXmlSettings.h"
 #include "ofxImageSequenceRecorder.h"
+#include "dataRecorder.h"
+#include "ofxGui.h"
+#include "ofxOsc.h"
+
+#define OSC_IP "127.0.0.1"
+#define OSC_PORT 12345
 
 #define MAX_SERIALS 5
+
 
 
 class ofApp : public ofBaseApp{
@@ -26,27 +33,26 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    void exit();
+        void exit();
     
         int nSerials;
         ofSerial serials[MAX_SERIALS];
         string messages[MAX_SERIALS];
     
-    
-    
         vector < dataCollector > dataCollectors;
     
         ofxXmlSettings XML;
+
     
+        ofParameter < float > minStrength;
+        ofParameter < float > maxStrength;
+        ofParameter < float > shaper;
+        ofxToggle useOsc;
+        ofxPanel panel;
     
-        ofVideoGrabber grabber;
-        string folderPath;
-        bool bRecording;
-        ofstream myfile;
-    int saveCount;
+        string sendMessage;
+        ofxOscSender sender;
     
-    
-    ofxImageSequenceRecorder ISR;
     
     
 };
