@@ -1,6 +1,26 @@
 <data>
-	<numSerials>1</numSerials>
-	<serial0>tty.usbserial-DA011GDF</serial0>
-	<serial1>tty.usbserial-1417</serial1>
-    <serial2>tty.usbserial-A40139LZ</serial2>
+    <numSerials>4</numSerials>
+    
+    <device>
+        <xbeeName>11</xbeeName>
+        <serial>tty.usbserial-DA011GDF</serial>
+    </device>
+    
+    <device>
+        <xbeeName>10</xbeeName>
+        <serial>tty.usbserial-DA011O5C</serial>
+    </device>
+    
+    
+    <device>
+        <xbeeName>12</xbeeName>
+        <serial>tty.usbserial-A40139LZ</serial>
+    </device>
+    
+    
+    <device>
+        <xbeeName>9</xbeeName>
+        <serial>tty.usbserial-A702ZMKC</serial>
+    </device>
+
 </data>

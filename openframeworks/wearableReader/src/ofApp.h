@@ -44,9 +44,16 @@ class ofApp : public ofBaseApp{
         ofxXmlSettings XML;
 
     
+    
+    
         ofParameter < float > minStrength;
         ofParameter < float > maxStrength;
         ofParameter < float > shaper;
+    
+        vector < ofParameter < float > > mins;
+        vector < ofParameter < float > > maxs;
+    
+    
         ofxToggle useOsc;
         ofxPanel panel;
     

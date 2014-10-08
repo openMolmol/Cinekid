@@ -1,5 +1,5 @@
 <relayControl>
-	<deviceId>tty.usbmodem1411</deviceId>
+	<deviceId>tty.usbmodem14141</deviceId>
 	<pins>
 		<pin>
 			<num>2</num>

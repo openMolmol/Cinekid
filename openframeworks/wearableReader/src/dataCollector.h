@@ -63,16 +63,19 @@ public:
     bool bMakeFakeData;
     string serialName;
     string message;
+    string deviceNumber;
     
     ofSerial ser;
     
-    dataSet sets[5];
-    
+    dataSet sets[4];
+    int nBytesRecvd;
     
     void setupSerial( string _serialName){
         serialName = _serialName;
         ser.setup(serialName, 115200);
         message ="";
+        
+ 
     }
     
     void update(){
@@ -84,13 +87,13 @@ public:
         
         vector < string > vals = ofSplitString(message, ",");
 
-        if (vals.size() < 7) return;
         
-        //cout <<  vals[0] << " ?"  << endl;
+        if (vals.size() != 5) return;
+       
         
+        addVal( ofToFloat(vals[1]), ofToFloat(vals[2])/1000.0, ofToFloat(vals[3])/1000.0, ofToFloat(vals[4])/1000.0 );
         
-        addVal( ofToFloat(vals[3]), ofToFloat(vals[4]), ofToFloat(vals[5]), ofToFloat(vals[6]) , (float)ofToInt(vals[1])  );
-        
+        //printf(" --> %f %f %f %f \n", ofToFloat(vals[1]), ofToFloat(vals[2])/1000.0, ofToFloat(vals[3])/1000.0, ofToFloat(vals[4])/1000.0 );
         //strength = 0.9f * strength + 0.1 * ofToFloat(vals[3]);
         
     }
@@ -100,28 +103,32 @@ public:
         sets[1].setup("heading", 100, -180, 180);
         sets[2].setup("pitch", 100, -180, 180);
         sets[3].setup("yaw", 100, -180, 180);
-        sets[4].setup("battery", 100, 0, 1024);
+        
+        nBytesRecvd = 0;
+        //sets[4].setup("battery", 100, 0, 1024);
     }
     
-    void addVal(float a,float b,float c,float d, float e){
+    void addVal(float a,float b,float c,float d){
         sets[0].newValue(a);
         sets[1].newValue(b);
         sets[2].newValue(c);
         sets[3].newValue(d);
-        sets[4].newValue(e);
-        cout << e << " SDF? " << endl;
+       // sets[4].newValue(e);
+       // cout << e << " SDF? " << endl;
         
         
     }
 
     void draw(ofRectangle bounds){
         ofDrawBitmapStringHighlight(serialName, ofPoint(bounds.x, bounds.y-20));
-        for (int i = 0; i < 5; i++){
+        ofDrawBitmapStringHighlight(ofToString(nBytesRecvd),ofPoint(bounds.x, bounds.y-40));
+        ofDrawBitmapStringHighlight(deviceNumber,ofPoint(bounds.x, bounds.y-60), ofColor::white, ofColor::darkMagenta);
+        for (int i = 0; i < 4; i++){
             ofRectangle newBounds;
             newBounds.x = bounds.x;
-            newBounds.y = bounds.y + (bounds.height / 5) * i;
+            newBounds.y = bounds.y + (bounds.height / 4) * i;
             newBounds.width = bounds.width;
-            newBounds.height = bounds.height / 5;
+            newBounds.height = bounds.height / 4;
             sets[i].draw(newBounds);
             
         }

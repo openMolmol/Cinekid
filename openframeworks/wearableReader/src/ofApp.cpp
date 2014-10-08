@@ -7,21 +7,40 @@
 void ofApp::setup(){
 
     
+    //      vector < ofParameter < float > > mins;
+    //      vector < ofParameter < float > > maxs;
+    
+    
     XML.load("settings.xml");
     
     nSerials = XML.getValue("data:numSerials", 0);
     
+    
+    
+    XML.pushTag("data");
     for (int i = 0; i < nSerials; i++){
         
+        ofParameter <float> val;
+        mins.push_back( val);
+        ofParameter <float> val2;
+        maxs.push_back( val2);
+        
+        XML.pushTag("device", i);
         string serialName= "serial" + ofToString(i);
-        string serialDeviceName =XML.getValue("data:" + serialName, "");
+        
+        int serialDeviceNumber =XML.getValue("xbeeName", 0);
+        string serialDeviceName =XML.getValue("serial", "");
         serials[i].setup(serialDeviceName, 115200);
+        
+        
         dataCollector DD;
         dataCollectors.push_back(DD);
         dataCollectors[dataCollectors.size()-1].setupData();
         dataCollectors[dataCollectors.size()-1].serialName = serialDeviceName;
+        dataCollectors[dataCollectors.size()-1].deviceNumber = "xbee: " + ofToString(serialDeviceNumber);
+        XML.popTag();
     }
-    
+    XML.popTag();
 
     
     ofSetVerticalSync(false);
@@ -32,7 +51,12 @@ void ofApp::setup(){
     panel.add(minStrength.set("minStrength", 0, 0, 1000));
     panel.add(maxStrength.set("maxStrength", 500, 0, 1000));
     panel.add(shaper.set("shaper", 1, 0.3, 3.0));
-    
+    ofxLabel label;
+    panel.add(label.setup("", "min/max"));
+    for (int i = 0; i < nSerials; i++){
+        panel.add(mins[i].set("min" + ofToString(i), 0, 0, 1024));
+        panel.add(maxs[i].set("max" + ofToString(i), 1024, 0, 1024));
+    }
     
     sender.setup(OSC_IP, OSC_PORT);
     
@@ -50,8 +74,11 @@ void ofApp::update(){
     
      //grabber.update();
     
-    
-
+    for (int i = 0; i < nSerials; i++){
+        dataCollectors[i].sets[0].min = mins[i];
+        dataCollectors[i].sets[0].max = maxs[i];
+        
+    }
     
     for (int i = 0; i < nSerials; i++){
         while (serials[i].available()){
@@ -60,6 +87,8 @@ void ofApp::update(){
             cout << howMany << endl;
             
             if (howMany == 0 || howMany == -1) return;
+            
+            dataCollectors[i].nBytesRecvd += howMany;
             
             for (int j = 0; j < howMany; j++){
                 
