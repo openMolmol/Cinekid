@@ -1,0 +1,24 @@
+<data>
+    <numSerials>3</numSerials>
+    
+    <device>
+        <xbeeName>11</xbeeName>
+        <serial>tty.usbserial-DA011GDF</serial>
+    </device>
+    
+    <device>
+        <xbeeName>10</xbeeName>
+        <serial>tty.usbserial-DA011O5C</serial>
+    </device>
+    
+    <device>
+        <xbeeName>9</xbeeName>
+        <serial>tty.usbserial-A702ZMKC</serial>
+    </device>
+    
+
+    
+    
+
+
+</data>
