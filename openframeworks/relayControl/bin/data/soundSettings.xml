@@ -1,0 +1,11 @@
+<group>
+	<grainsPerSecond>200</grainsPerSecond>
+	<avgFreq>21</avgFreq>
+	<avgFreqSpread>50</avgFreqSpread>
+	<avgGrainLength>50</avgGrainLength>
+	<avgGrainSpreadLength>20.5</avgGrainSpreadLength>
+	<avgVolume>0.18</avgVolume>
+	<avgVolumeSpread>0.1075</avgVolumeSpread>
+	<overallVolume>1</overallVolume>
+<group/>
+</group>

@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 907C5B5E104864A2D3A25745 /* ofxToggle.cpp */; };
+		45410F4819E5A933008D78BF /* ofxDmx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45410F4619E5A933008D78BF /* ofxDmx.cpp */; };
+		45410F4F19E5AC2E008D78BF /* lightController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45410F4D19E5AC2E008D78BF /* lightController.cpp */; };
+		45410F5A19E657D4008D78BF /* fanManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45410F5819E657D4008D78BF /* fanManager.cpp */; };
+		45410F6419E65B14008D78BF /* granularGrain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45410F5E19E65B14008D78BF /* granularGrain.cpp */; };
+		45410F6519E65B14008D78BF /* granularManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45410F6019E65B14008D78BF /* granularManager.cpp */; };
+		45410F6619E65B14008D78BF /* soundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45410F6219E65B14008D78BF /* soundManager.cpp */; };
 		483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78D67A00EB899FAC09430597 /* ofxLabel.cpp */; };
 		5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC5DA1C87211D4F6377DA719 /* tinyxmlparser.cpp */; };
 		5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C88333E71C9457E441C33474 /* ofxButton.cpp */; };
@@ -90,6 +96,18 @@
 		1C0DA2561397A7DE0246858B /* ofxGuiGroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGuiGroup.h; path = ../../../addons/ofxGui/src/ofxGuiGroup.h; sourceTree = SOURCE_ROOT; };
 		2834D88A62CD23F3DE2C47D1 /* ofxButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxButton.h; path = ../../../addons/ofxGui/src/ofxButton.h; sourceTree = SOURCE_ROOT; };
 		2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = tinyxml.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxml.cpp; sourceTree = SOURCE_ROOT; };
+		45410F4619E5A933008D78BF /* ofxDmx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDmx.cpp; sourceTree = "<group>"; };
+		45410F4719E5A933008D78BF /* ofxDmx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDmx.h; sourceTree = "<group>"; };
+		45410F4D19E5AC2E008D78BF /* lightController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lightController.cpp; path = ../lightController.cpp; sourceTree = "<group>"; };
+		45410F4E19E5AC2E008D78BF /* lightController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lightController.h; path = ../lightController.h; sourceTree = "<group>"; };
+		45410F5819E657D4008D78BF /* fanManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fanManager.cpp; sourceTree = "<group>"; };
+		45410F5919E657D4008D78BF /* fanManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fanManager.h; sourceTree = "<group>"; };
+		45410F5E19E65B14008D78BF /* granularGrain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = granularGrain.cpp; sourceTree = "<group>"; };
+		45410F5F19E65B14008D78BF /* granularGrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = granularGrain.h; sourceTree = "<group>"; };
+		45410F6019E65B14008D78BF /* granularManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = granularManager.cpp; sourceTree = "<group>"; };
+		45410F6119E65B14008D78BF /* granularManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = granularManager.h; sourceTree = "<group>"; };
+		45410F6219E65B14008D78BF /* soundManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = soundManager.cpp; sourceTree = "<group>"; };
+		45410F6319E65B14008D78BF /* soundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = soundManager.h; sourceTree = "<group>"; };
 		50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxXmlSettings.cpp; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.cpp; sourceTree = SOURCE_ROOT; };
 		52AFA1F08C420992CAAAE648 /* ofxSlider.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxSlider.h; path = ../../../addons/ofxGui/src/ofxSlider.h; sourceTree = SOURCE_ROOT; };
 		78D67A00EB899FAC09430597 /* ofxLabel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxLabel.cpp; path = ../../../addons/ofxGui/src/ofxLabel.cpp; sourceTree = SOURCE_ROOT; };
@@ -199,6 +217,45 @@
 			name = ofxXmlSettings;
 			sourceTree = "<group>";
 		};
+		45410F4519E5A933008D78BF /* src */ = {
+			isa = PBXGroup;
+			children = (
+				45410F4619E5A933008D78BF /* ofxDmx.cpp */,
+				45410F4719E5A933008D78BF /* ofxDmx.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		45410F4919E5A93F008D78BF /* ofxDMX */ = {
+			isa = PBXGroup;
+			children = (
+				45410F4519E5A933008D78BF /* src */,
+			);
+			name = ofxDMX;
+			path = ../../../addons/ofxDmx/src;
+			sourceTree = "<group>";
+		};
+		45410F5C19E65B14008D78BF /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				45410F5D19E65B14008D78BF /* granularSynthesis */,
+				45410F6219E65B14008D78BF /* soundManager.cpp */,
+				45410F6319E65B14008D78BF /* soundManager.h */,
+			);
+			path = sound;
+			sourceTree = "<group>";
+		};
+		45410F5D19E65B14008D78BF /* granularSynthesis */ = {
+			isa = PBXGroup;
+			children = (
+				45410F5E19E65B14008D78BF /* granularGrain.cpp */,
+				45410F5F19E65B14008D78BF /* granularGrain.h */,
+				45410F6019E65B14008D78BF /* granularManager.cpp */,
+				45410F6119E65B14008D78BF /* granularManager.h */,
+			);
+			path = granularSynthesis;
+			sourceTree = "<group>";
+		};
 		480A780D8D0308AE4A368801 /* ofxGui */ = {
 			isa = PBXGroup;
 			children = (
@@ -254,6 +311,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				45410F4919E5A93F008D78BF /* ofxDMX */,
 				FDBF85F019E40A7300476543 /* ofxOsc */,
 				480A780D8D0308AE4A368801 /* ofxGui */,
 				1F4FB5C423662B96ADFDCC0B /* ofxXmlSettings */,
@@ -323,8 +381,13 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				45410F5C19E65B14008D78BF /* sound */,
+				45410F4D19E5AC2E008D78BF /* lightController.cpp */,
+				45410F4E19E5AC2E008D78BF /* lightController.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
+				45410F5819E657D4008D78BF /* fanManager.cpp */,
+				45410F5919E657D4008D78BF /* fanManager.h */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
 			);
 			path = src;
@@ -527,14 +590,18 @@
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				FDBF862719E40A7300476543 /* ofxOscReceiver.cpp in Sources */,
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
+				45410F6419E65B14008D78BF /* granularGrain.cpp in Sources */,
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
+				45410F4819E5A933008D78BF /* ofxDmx.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
 				FDBF862819E40A7300476543 /* ofxOscSender.cpp in Sources */,
+				45410F6519E65B14008D78BF /* granularManager.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
+				45410F6619E65B14008D78BF /* soundManager.cpp in Sources */,
 				63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */,
 				933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */,
 				9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */,
@@ -545,6 +612,8 @@
 				FDBF862019E40A7300476543 /* OscOutboundPacketStream.cpp in Sources */,
 				FDBF861B19E40A7300476543 /* IpEndpointName.cpp in Sources */,
 				FDBF862319E40A7300476543 /* OscTypes.cpp in Sources */,
+				45410F4F19E5AC2E008D78BF /* lightController.cpp in Sources */,
+				45410F5A19E657D4008D78BF /* fanManager.cpp in Sources */,
 				FDBF862419E40A7300476543 /* ofxOscBundle.cpp in Sources */,
 				5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */,
 				FDBF862119E40A7300476543 /* OscPrintReceivedElements.cpp in Sources */,

@@ -43,9 +43,7 @@ class ofApp : public ofBaseApp{
     
         ofxXmlSettings XML;
 
-    
-    
-    
+
         ofParameter < float > minStrength;
         ofParameter < float > maxStrength;
         ofParameter < float > shaper;
@@ -55,6 +53,15 @@ class ofApp : public ofBaseApp{
     
     
         ofxToggle useOsc;
+    
+        ofxToggle calDynamicMinMax;
+        ofParameter< float > maxOverMinDynamicRange;
+        ofParameter< float > dynamicHistoryLength;
+        ofParameter< float > dynamicChangeRate;
+
+        ofParameter < bool > bUseDevices[5];
+    
+    
         ofxPanel panel;
     
         string sendMessage;

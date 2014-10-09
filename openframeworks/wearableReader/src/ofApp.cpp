@@ -51,12 +51,22 @@ void ofApp::setup(){
     panel.add(minStrength.set("minStrength", 0, 0, 1000));
     panel.add(maxStrength.set("maxStrength", 500, 0, 1000));
     panel.add(shaper.set("shaper", 1, 0.3, 3.0));
-    ofxLabel label;
-    panel.add(label.setup("", "min/max"));
+    
+    
     for (int i = 0; i < nSerials; i++){
         panel.add(mins[i].set("min" + ofToString(i), 0, 0, 1024));
         panel.add(maxs[i].set("max" + ofToString(i), 1024, 0, 1024));
     }
+    
+    panel.add(calDynamicMinMax.setup("calc dynamic min max", false));
+    panel.add(maxOverMinDynamicRange.set("max over min", 100, 0, 1000));
+    panel.add(dynamicHistoryLength.set("dyn history len", 100, 0, 2000));
+    panel.add(dynamicChangeRate.set("dyn change rate", 0.9, 0.9, 1.0));
+    
+    for (int i = 0; i < nSerials; i++){
+        panel.add(bUseDevices[i].set("use device" + ofToString(i), true));
+    }
+    
     
     sender.setup(OSC_IP, OSC_PORT);
     
@@ -74,17 +84,47 @@ void ofApp::update(){
     
      //grabber.update();
     
-    for (int i = 0; i < nSerials; i++){
-        dataCollectors[i].sets[0].min = mins[i];
-        dataCollectors[i].sets[0].max = maxs[i];
+    if (calDynamicMinMax){
         
+        for (int i = 0; i < nSerials; i++){
+            dataCollectors[i].historyLength = dynamicHistoryLength;
+            float min = dataCollectors[i].getMin();
+            float max = dataCollectors[i].getMax();
+            
+            cout << i << " " << min << " " << max << endl;
+            
+            if (min >= 0.0){
+                dataCollectors[i].sets[0].min = (dynamicChangeRate) *  dataCollectors[i].sets[0].min +
+                                                (1-dynamicChangeRate) * min;
+                
+                mins[i] = dataCollectors[i].sets[0].min;
+            }
+            if (max >= 0.0){
+                dataCollectors[i].sets[0].max = (dynamicChangeRate) *  dataCollectors[i].sets[0].max +
+                                                (1-dynamicChangeRate) * max;
+                
+                if ((dataCollectors[i].sets[0].max - dataCollectors[i].sets[0].min) < maxOverMinDynamicRange){
+                    dataCollectors[i].sets[0].max = dataCollectors[i].sets[0].min + maxOverMinDynamicRange;
+                }
+                
+                maxs[i] = dataCollectors[i].sets[0].max;
+            }
+        }
+        
+        
+        
+        
+    } else {
+        for (int i = 0; i < nSerials; i++){
+            dataCollectors[i].sets[0].min = mins[i];
+            dataCollectors[i].sets[0].max = maxs[i];
+        }
     }
-    
     for (int i = 0; i < nSerials; i++){
         while (serials[i].available()){
             unsigned char bytes[100];
             int howMany = serials[i].readBytes(bytes, 100);
-            cout << howMany << endl;
+            //cout << howMany << endl;
             
             if (howMany == 0 || howMany == -1) return;
             
@@ -119,8 +159,61 @@ void ofApp::update(){
         }
     }
     
+    static float ToSend = 0;
     if (useOsc == true){
         
+        int nDevicesToUse = 3;
+        
+        float valsToSend[3];
+        for (int i = 0; i < 3; i++){
+            valsToSend[i] = 0;
+        }
+        
+        float energy = 0;
+        int countOfDev = 0;
+        for (int i = 0; i < nDevicesToUse; i++){
+            if (dataCollectors[i].sets[0].values.size() > 0){
+                float curValue = dataCollectors[i].sets[0].currentvalue;
+                if(bUseDevices[i]){
+                    energy += powf(ofMap(curValue, mins[i], maxs[i], 0, 1.0, true), 1.5) * 3.0;
+                    countOfDev++;
+                }
+                if (i < 3) {
+                    if(bUseDevices[i]){
+                        valsToSend[i] = ofMap(curValue, mins[i], maxs[i], 0, 1.0, true);
+                    } else {
+                        valsToSend[i] = 0;
+                    }
+                }
+                //cout << i << " " << ofMap(curValue, mins[i], maxs[i], 0, 1.0, true) << endl;
+            }
+        }
+        
+        energy/= (float)MAX(countOfDev,1);
+        energy = ofClamp(energy, 0, 1);
+            //energy /= (float)nDevicesToUse;
+            
+            
+            float sendValue = energy;
+            
+            
+            sendValue = powf(sendValue, shaper);
+            
+            //ToSend = 0.97f * ToSend + 0.03 * sendValue;
+            sendMessage = "sending " + ofToString(sendValue, 4) + "\n" + ofToString(valsToSend[0]) + "\n" + ofToString(valsToSend[1]) + "\n" + ofToString(valsToSend[2]) + "\n";
+            
+            ofxOscMessage message;
+            message.setAddress("/strength");
+            message.addFloatArg(sendValue);
+            message.addFloatArg(valsToSend[0]);
+            message.addFloatArg(valsToSend[1]);
+            message.addFloatArg(valsToSend[2]);
+        
+            sender.sendMessage(message);
+            
+        
+        
+        /*
         if (dataCollectors[0].sets[0].values.size() > 0){
             
             float curValue = dataCollectors[0].sets[0].currentvalue;
@@ -134,6 +227,7 @@ void ofApp::update(){
             message.addFloatArg(sendValue);
             sender.sendMessage(message);
         }
+        */
         
     }
     

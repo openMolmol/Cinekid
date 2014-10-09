@@ -4,7 +4,9 @@
 #include "ofxXmlSettings.h"
 #include "ofxGui.h"
 #include "ofxOsc.h"
-
+#include "lightController.h"
+#include "fanManager.h"
+#include "soundManager.h"
 
 class ofApp : public ofBaseApp{
 
@@ -23,27 +25,30 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    
-        void allOnChanged( );
-        
-        int whichDevice;
-        ofSerial serial;
-        vector <ofSerialDeviceInfo> devices;
-        ofArduino arduino;
-        ofxXmlSettings xml;
-        
-        vector < ofParameter <bool> > relayPins;
-    
-    
+        void audioRequested(float * input, int bufferSize, int nChannels);
+
         ofxToggle useOsc;
         ofxToggle allOn;
-        
         ofxPanel panel;
-        vector < int > pinIds;
-        vector < bool > bFlipMes;
+
+        ofxOscReceiver receiver;
+        lightController  LC;
     
+        float overAllEnergy;
+        float individEnergy[3];
     
-    ofxOscReceiver receiver;
+    fanManager FM;
+    
+    soundManager SM;
+    
+    float angle;
+    float angleAdder;
+    
+    ofPoint mainTargetColor;
+    float overallEnergySmooth;
+    float overallEnergyChange;
+    int nFramesNoEnergyChange;
+    float noEnergyChangeEnergy;
     
     //ofxGui gui;
     

@@ -65,17 +65,57 @@ public:
     string message;
     string deviceNumber;
     
+    
+    vector < float > strengthHistory;
+    int historyLength = 200;
+    
     ofSerial ser;
     
     dataSet sets[4];
     int nBytesRecvd;
     
+    
+    float getMin(){
+        
+        if (strengthHistory.size() == 0){
+            return -1;
+        } else {
+            
+            vector < float > temp = strengthHistory;
+            ofSort(temp);
+            float avgMin = 0;
+            for (int i = 0; i < temp.size()*0.15; i++){
+                avgMin += temp[i];
+            }
+            avgMin /= (float)temp.size()*0.15;
+            return avgMin;
+            //return *(std::min_element(strengthHistory.begin(),strengthHistory.end()));
+        }
+        return -1;
+    }
+    
+    float getMax(){
+        if (strengthHistory.size() == 0){
+            return -1;
+        } else {
+            
+            vector < float > temp = strengthHistory;
+            ofSort(temp);
+            float avgMax = 0;
+            for (int i = temp.size()-1; i >= temp.size()*0.85; i--){
+                avgMax += temp[i];
+            }
+            avgMax /= (float)temp.size()*0.15;
+            return avgMax;
+            //return *(std::min_element(strengthHistory.begin(),strengthHistory.end()));
+        }
+        return -1;
+    }
+    
     void setupSerial( string _serialName){
         serialName = _serialName;
         ser.setup(serialName, 115200);
-        message ="";
-        
- 
+        message =""; 
     }
     
     void update(){
@@ -92,6 +132,13 @@ public:
        
         
         addVal( ofToFloat(vals[1]), ofToFloat(vals[2])/1000.0, ofToFloat(vals[3])/1000.0, ofToFloat(vals[4])/1000.0 );
+        
+        // todo optimize
+        
+        strengthHistory.push_back(ofToFloat(vals[1]));
+        while (strengthHistory.size() > historyLength){
+            strengthHistory.erase(strengthHistory.begin());
+        }
         
         //printf(" --> %f %f %f %f \n", ofToFloat(vals[1]), ofToFloat(vals[2])/1000.0, ofToFloat(vals[3])/1000.0, ofToFloat(vals[4])/1000.0 );
         //strength = 0.9f * strength + 0.1 * ofToFloat(vals[3]);
@@ -113,10 +160,6 @@ public:
         sets[1].newValue(b);
         sets[2].newValue(c);
         sets[3].newValue(d);
-       // sets[4].newValue(e);
-       // cout << e << " SDF? " << endl;
-        
-        
     }
 
     void draw(ofRectangle bounds){
