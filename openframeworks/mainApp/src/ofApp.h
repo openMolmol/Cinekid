@@ -29,10 +29,7 @@ class ofApp : public ofBaseApp{
     
         void audioRequested(float * input, int bufferSize, int nChannels);
 
-        ofxToggle useOsc;
-        ofxToggle allOn;
-        ofxPanel panel;
-
+        
         //ofxOscReceiver receiver;
         lightController  LC;
     

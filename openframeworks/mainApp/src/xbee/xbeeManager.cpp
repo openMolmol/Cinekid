@@ -149,6 +149,27 @@ void xbeeManager::update(){
                     dataCollectors[i].parseMessage(messages[i]);
                     messages[i] = "";
                     
+                    // calc dx on stuff:
+                    
+                    if (dataCollectors[i].sets[1].values.size() > 1){
+                        
+                        
+                        
+                        float dx1 =  *(dataCollectors[i].sets[2].values.end()-1) -
+                                     *(dataCollectors[i].sets[2].values.end()-2);
+                        
+                        float dx2 =  *(dataCollectors[i].sets[2].values.end()-1) -
+                                    *(dataCollectors[i].sets[2].values.end()-2);
+                        
+                        float dx3 =  *(dataCollectors[i].sets[2].values.end()-1) -
+                                     *(dataCollectors[i].sets[2].values.end()-2);
+                        
+                        
+                        statList[i].nineDofEnergy = 0.97f * statList[i].nineDofEnergy +
+                                                    0.03f * (fabs(dx1 + dx2 + dx3) / 3.0);
+                        
+                        
+                    }
                     
                     //cout << i << " --> " <<  messages[i] << endl;
                     
@@ -173,6 +194,9 @@ void xbeeManager::update(){
         for (int i = 0; i < 3; i++){
             valsToSend[i] = 0;
         }
+        
+        
+        
         
         float energy = 0;
         int countOfDev = 0;

@@ -5,11 +5,8 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    panel.setup("fan control");
-    panel.add(allOn.setup("all on", false));
-    panel.add(useOsc.setup("use osc", false));
     
-    LC.setup();
+    //LC.setup();
     FM.setup();
     SM.setup();
     XM.setup();
@@ -25,7 +22,7 @@ void ofApp::setup(){
     
     
     
-    panel.setPosition(820, 50);
+    FM.panel.setPosition(820, 50);
     SM.panel.setPosition(820, 500);
     
     
@@ -100,6 +97,7 @@ void ofApp::update(){
     
     
     //cout << allOn << endl;
+    
     
         
     
@@ -192,7 +190,7 @@ void ofApp::update(){
             
             
             
-            LC.setColor(i, result);
+            //LC.setColor(i, result);
             //dmx.setLevel(2+j+ who * 5, 255 * pct);
             
         }
@@ -219,12 +217,12 @@ void ofApp::update(){
         
     //}
     
-    LC.setColor(12,  a);
-    LC.setColor(13,  b);
-    LC.setColor(14,  c);
+    //LC.setColor(12,  a);
+    //LC.setColor(13,  b);
+    //LC.setColor(14,  c);
 
     
-    LC.update();
+    //LC.update();
     FM.update();
     SM.update();
     
@@ -239,12 +237,12 @@ void ofApp::draw(){
     
         XM.draw();
         XM.panel.setPosition(600,30);
-        panel.setPosition(800+20,30);
+        FM.panel.setPosition(800+20,30);
         SM.panel.setPosition(1000+40,30);
         SM.draw();
         FM.draw();
-        LC.draw();
-        panel.draw();
+        //LC.draw();
+        FM.panel.draw();
 
     
     

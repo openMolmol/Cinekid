@@ -1,6 +1,7 @@
 
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
+#include "ofxGui.h"
 
 #pragma once 
 
@@ -32,4 +33,8 @@ public:
     void computeFanEnergy();
     float energyPerFan[12];
     
+    
+    ofxToggle allOn;
+    ofxPanel panel;
+
 };

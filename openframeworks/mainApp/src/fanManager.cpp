@@ -25,6 +25,11 @@ bool bAllOnLastFrame = false;
 
 void fanManager::setup(){
     
+    
+    panel.setup("fan control");
+    panel.add(allOn.setup("all on", false));
+  
+    
     serial.listDevices();
     devices = serial.getDeviceList();
     xml.load("relaySettings.xml");
@@ -54,7 +59,7 @@ void fanManager::setup(){
         bFlipMes.push_back(xml.getValue("flipOnOff", "true") == "true" ? true : false);
         bool bDefaultState = xml.getValue("defaultState", "true") == "true" ? true : false;
         
-        ((ofApp*)ofGetAppPtr())->panel.add(relayPins[relayPins.size()-1].set("fan id " + ofToString(i) + " pin " + ofToString(xml.getValue("num", 0)), bDefaultState));
+        panel.add(relayPins[relayPins.size()-1].set("fan id " + ofToString(i) + " pin " + ofToString(xml.getValue("num", 0)), bDefaultState));
         arduino.sendDigitalPinMode(pinIds[i],ARD_OUTPUT);
         
         xml.popTag();
@@ -120,12 +125,23 @@ void fanManager::computeFanEnergy(){
 
 void fanManager::update(){
     
+    
+    if (allOn != bAllOnLastFrame){
+        
+        for (int i = 0; i < relayPins.size(); i++){
+            relayPins[i] = allOn;
+        }
+        
+    }
+    
+    bAllOnLastFrame = allOn;
+    
+    
     arduino.update();
     
     //cout << arduino.isArduinoReady() << endl;
     
-    if (ofGetFrameNum() > 60*4){
-        
+    if (ofGetFrameNum() > 60*4){        // wait some time after startup
         for (int i = 0; i < relayPins.size(); i++){
             bool bOn = relayPins[i];
             if (bFlipMes[i] == true) bOn = !bOn;
@@ -136,15 +152,6 @@ void fanManager::update(){
             }
         }
     }
-//    
-//    if (((ofApp*)ofGetAppPtr())->allOn != bAllOnLastFrame){
-//        for (int i = 0; i < relayPins.size(); i++){
-//            relayPins[i] = ((ofApp*)ofGetAppPtr())->allOn;
-//        }
-//    }
-//    
-//    bAllOnLastFrame = ((ofApp*)ofGetAppPtr())->allOn;
-    
     
 }
 
