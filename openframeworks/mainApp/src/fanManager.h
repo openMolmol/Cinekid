@@ -33,7 +33,7 @@ public:
     void computeFanEnergy();
     float energyPerFan[12];
     
-    
+     ofxToggle bManual;
     ofxToggle allOn;
     ofxPanel panel;
 

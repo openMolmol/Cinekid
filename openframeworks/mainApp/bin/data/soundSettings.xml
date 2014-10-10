@@ -9,4 +9,16 @@
 	<maxVolume>0</maxVolume>
 	<actualVolume>0</actualVolume>
 	<soundHitShaper>6.3</soundHitShaper>
+<sound>
+		<grainsPerSecond>200</grainsPerSecond>
+		<avgFreq>30</avgFreq>
+		<avgFreqSpread>10</avgFreqSpread>
+		<avgGrainLength>50</avgGrainLength>
+		<avgGrainSpreadLength>10</avgGrainSpreadLength>
+		<avgVolume>0.01</avgVolume>
+		<avgVolumeSpread>0.005</avgVolumeSpread>
+		<maxVolume>0</maxVolume>
+		<actualVolume>0</actualVolume>
+		<soundHitShaper>6.3</soundHitShaper>
+	</sound>
 </group>

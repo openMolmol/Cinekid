@@ -18,6 +18,11 @@ public:
     void update();
     void draw();
     
+    void fireC02(){
+        bOnA = true;
+        startTimeA = ofGetElapsedTimeMillis();
+    }
+    
     void setColor(int location, ofPoint color);
     void setColor(int location, ofColor color);
     
@@ -26,4 +31,8 @@ public:
     light tankLights[2];
 
 	ofxDmx dmx;
+    
+    int startTimeA;
+    int durationA;
+    bool bOnA;
 };

@@ -71,6 +71,7 @@ class xbeeManager {
         ofParameter< float > dynamicChangeRate;
 
         ofParameter < bool > bUseDevices[5];
+        ofParameter < bool > bUse9dofInsteadOfMuscle[5];
     
     
         ofxPanel panel;

@@ -1,3 +1,4 @@
+
 #include "ofApp.h"
 
 
@@ -6,7 +7,7 @@
 void ofApp::setup(){
     
     
-    //LC.setup();
+    LC.setup();
     FM.setup();
     SM.setup();
     XM.setup();
@@ -20,42 +21,101 @@ void ofApp::setup(){
 
     noEnergyChangeEnergy = 0;
     
-    
-    
-    FM.panel.setPosition(820, 50);
-    SM.panel.setPosition(820, 500);
-    
-    
     bDrawInput = true;
+    
+    XM.panel.setPosition(600,30);
+    FM.panel.setPosition(800+20,30);
+    SM.panel.setPosition(1000+40,30);
+    
+    
+    
+    co2panel.setup();
+    co2panel.add(bUseCo2.set("use c02", true));
+    co2panel.add(minutesBetweenC02.set("minutes betw", 5, 3, 60));
+    co2panel.add(resetTimer.set("reset timer", false));
+    co2panel.add(fireSoon.set("advance timer", false));
+    co2panel.add(fireNow.set("fire now", false));
+    co2panel.add(nFramesHighToFire.set("n high frames to fire", 50, 1, 1000));
+    
+    
+    
+    co2panel.setPosition(1000+40, 400);
+    
+    lastC02event = ofGetElapsedTimeMillis();
+    nextC02eventTime = ofGetElapsedTimeMillis() + (minutesBetweenC02 * 60 * 1000);
+    
+    cout << minutesBetweenC02 << endl;
+    cout << nextC02eventTime << endl;
+    //std::exit(0);
 }
 
 
 
 static float crazyAngle = 0;
 
-
 //--------------------------------------------------------------
 void ofApp::update(){
-
-    XM.update();
     
-    /*while(receiver.hasWaitingMessages()){
-        ofxOscMessage m;
-		receiver.getNextMessage(&m);
-        if(m.getAddress() == "/strength");
-        float strength = m.getArgAsFloat(0);
-        overAllEnergy = strength;
+    
+    
+    // handle c02 logic:
+    
+    if (bUseCo2){
         
-        float overallEnergySmoothLastFrame = overallEnergySmooth;
-        if (overallEnergySmooth < overAllEnergy){
-            overallEnergySmooth = 0.94f * overallEnergySmooth + 0.06 * overAllEnergy;
-        } else {
-            overallEnergySmooth = 0.99f * overallEnergySmooth + 0.01 * overAllEnergy;
+        if (fireNow == true){
+            LC.fireC02();
+            nextC02eventTime = ofGetElapsedTimeMillis() + (minutesBetweenC02 * 60 * 1000);
+            fireNow = false;
         }
         
-        overallEnergyChange = overallEnergySmoothLastFrame-overallEnergySmooth;
-        cout << fabs(overallEnergyChange) << endl;
-        if (fabs(overallEnergyChange) < 0.001){
+        if (resetTimer == true){
+            nextC02eventTime = ofGetElapsedTimeMillis() + (minutesBetweenC02 * 60 * 1000);
+            resetTimer = false;
+        }
+        
+        if (fireSoon == true){
+            nextC02eventTime = ofGetElapsedTimeMillis();
+            fireSoon = false;
+        }
+        
+        if (overallEnergySmooth > 0.95){
+            nFramesGoodForC02++;
+        } else {
+            nFramesGoodForC02 = 0;
+        }
+        
+        int timeTillNext =  nextC02eventTime - ofGetElapsedTimeMillis();
+        
+        if (timeTillNext <= 0){
+            if (nFramesGoodForC02 > nFramesHighToFire){
+                LC.fireC02();
+                nextC02eventTime = ofGetElapsedTimeMillis() + (minutesBetweenC02 * 60 * 1000);
+            }
+            
+        }
+        
+        //cout <<  " nFramesGoodForC02 -- " << nFramesGoodForC02 << endl;
+        
+        
+    }
+    
+    
+    
+
+    XM.update();
+
+    overAllEnergy =  XM.overallEnergy;
+        
+    float overallEnergySmoothLastFrame = overallEnergySmooth;
+    if (overallEnergySmooth < overAllEnergy){
+        overallEnergySmooth = 0.94f * overallEnergySmooth + 0.06 * overAllEnergy;
+    } else {
+        overallEnergySmooth = 0.99f * overallEnergySmooth + 0.01 * overAllEnergy;
+    }
+    
+    overallEnergyChange = overallEnergySmoothLastFrame-overallEnergySmooth;
+    
+    if (fabs(overallEnergyChange) < 0.001){
             nFramesNoEnergyChange++;
         } else {
             nFramesNoEnergyChange = 0;
@@ -67,34 +127,24 @@ void ofApp::update(){
             
             noEnergyChangeEnergy = noEnergyChangeEnergy * 0.99 + 0.01 * 0.0;
         }
-       // cout << nFramesNoEnergyChange << endl;
-        
-        // sub energies:
+
         
         // TODO param
-        individEnergy[0] = 0.95f * individEnergy[0]  + 0.05 * m.getArgAsFloat(1);
-        individEnergy[1] = 0.95f * individEnergy[1]  + 0.05 * m.getArgAsFloat(2);
-        individEnergy[2] = 0.95f * individEnergy[2]  + 0.05 * m.getArgAsFloat(3);
+        individEnergy[0] = 0.95f * individEnergy[0]  + 0.05 * XM.statList[0].energy;
+        individEnergy[1] = 0.95f * individEnergy[1]  + 0.05 * XM.statList[1].energy;
+        individEnergy[2] = 0.95f * individEnergy[2]  + 0.05 * XM.statList[2].energy;
         
         // TODO better logic here please
         
-        if (useOsc == true){
-            
-            
-            
-            FM.setStrength(0, m.getArgAsFloat(1));
-            FM.setStrength(1, m.getArgAsFloat(2));
-            FM.setStrength(2, m.getArgAsFloat(3));
-            
-            
-            //FM.setStrength(overAllEnergy);
-            // TODO FIXME  //setStregnth
+        if (true){
+            FM.setStrength(0, XM.statList[0].energy);
+            FM.setStrength(1,XM.statList[1].energy);
+            FM.setStrength(2, XM.statList[2].energy);
         }
         
         FM.computeFanEnergy();
-    }
-    */
-    
+
+
     
     //cout << allOn << endl;
     
@@ -104,9 +154,14 @@ void ofApp::update(){
     //-------------------------------------------------------------
     // light
     
-    ofColor a =ofColor::green;
-    ofColor b =ofColor::red;
-    ofColor c =ofColor::blue;
+    ofColor a = ofColor(0,250,154); // aqua
+    ofColor b = ofColor(127,255,0); // spring green
+    ofColor c = ofColor(238,130,238);   // violet
+    
+    
+    //ofColor a =ofColor::green;
+    //ofColor b =ofColor::red;
+    //ofColor c =ofColor::blue;
     
     a.setBrightness( ofMap(individEnergy[0], 0, 1, 100, 255, true));
     b.setBrightness( ofMap(individEnergy[1], 0, 1, 100, 255, true));
@@ -124,9 +179,9 @@ void ofApp::update(){
         }
     }
     
-    ofColor aT =ofColor::green;
-    ofColor bT =ofColor::red;
-    ofColor cT =ofColor::blue;
+    ofColor aT = a;
+    ofColor bT = b;
+    ofColor cT = c;
     
     ofColor colors[3];
     colors[0]= aT;
@@ -142,8 +197,6 @@ void ofApp::update(){
         mainTargetColor = 0.93f * mainTargetColor + 0.07 * ofPoint(255,255,255);
         
     }
-    
-    
     
     //overAllEnergy = ofMap(mouseX, 0, ofGetWidth(), 0, 1);
     //overallEnergySmooth = 0.98f * overallEnergySmooth + 0.02*overAllEnergy;
@@ -180,17 +233,15 @@ void ofApp::update(){
             float onPulse = crazyAmount * onValue + (1-crazyAmount) * pct;
             
             
-            float newVal = onPulse *( 80 + powf(overallEnergySmooth,2.0) * (255-80));
-             newVal = ofMap( powf(sin(ofGetElapsedTimeMillis()/2000.0)*0.5+0.5, 6.0), 0,1, newVal, newVal - newVal * noEnergyChangeEnergy);
+            float newVal = onPulse * ((255 * noEnergyChangeEnergy) +  (1-noEnergyChangeEnergy) * ( 80 + powf(overallEnergySmooth,2.0) * (255-80)));
+            
+            
+             newVal = ofMap( powf(sin(ofGetElapsedTimeMillis()/800.0)*0.5+0.5, 3.0), 0,1, newVal, newVal - newVal * noEnergyChangeEnergy);
             
             
             result.setBrightness( newVal );
-                
-            
-            
-            
-            
-            //LC.setColor(i, result);
+
+            LC.setColor(i, result);
             //dmx.setLevel(2+j+ who * 5, 255 * pct);
             
         }
@@ -217,12 +268,12 @@ void ofApp::update(){
         
     //}
     
-    //LC.setColor(12,  a);
-    //LC.setColor(13,  b);
-    //LC.setColor(14,  c);
+    LC.setColor(12,  a);
+    LC.setColor(13,  b);
+    LC.setColor(14,  c);
 
     
-    //LC.update();
+    LC.update();
     FM.update();
     SM.update();
     
@@ -236,20 +287,27 @@ void ofApp::draw(){
     
     
         XM.draw();
-        XM.panel.setPosition(600,30);
-        FM.panel.setPosition(800+20,30);
-        SM.panel.setPosition(1000+40,30);
+    
         SM.draw();
         FM.draw();
-        //LC.draw();
+        LC.draw();
         FM.panel.draw();
 
-    
+    co2panel.draw();
     
         
+    ofDrawBitmapString("last c02: " +  ofToString(lastC02event / 1000.0, 3) , 1000+40, 600);
+    int timeTillNext =  nextC02eventTime - ofGetElapsedTimeMillis();
+    if (timeTillNext < 0) timeTillNext = 0;
+    //cout << ofGetElapsedTimeMillis() << " " << nextC02eventTime << endl;
+    
+    ofDrawBitmapString("seconds till next c02: " +  ofToString(timeTillNext / 1000.0, 3) , 1000+40, 650);
     
     
+    //lastC02event = ofGetElapsedTimef();
+    //nextC02eventTime = ofGetElapsedTimeMillis() + minutesBetweenC02 * 60 * 1000;
     
+
     
     
     
@@ -272,6 +330,29 @@ void ofApp::audioRequested(float * output, int bufferSize, int nChannels){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
+    if (key == 's'){
+        
+        // todo save and load settings
+        
+//        XM.panel.saveToFile("xbeePanelSettings.xml");
+//        
+//        string fileName = ofToDataPath("xbeePanelSettings.xml");
+//        string cmd = "sed '/\\/>/d' " + fileName + " > " + fileName + ".fix";
+//        system(cmd.c_str());
+//        cmd = "mv " +  fileName + ".fix" + " " + fileName;
+//        system(cmd.c_str());
+//        
+//        
+//        FM.panel.saveToFile("fanPanelSettings.xml");
+//        
+//        fileName = ofToDataPath("fanPanelSettings.xml");
+//        cmd = "sed '/\\/>/d' " + fileName + " > " + fileName + ".fix";
+//        system(cmd.c_str());
+//        cmd = "mv " +  fileName + ".fix" + " " + fileName;
+//        system(cmd.c_str());
+        
+    }
+    
     XM.keyPressed(key);
     SM.keyPressed(key);
 }

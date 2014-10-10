@@ -56,6 +56,23 @@ class ofApp : public ofBaseApp{
     
         bool bDrawInput;
     
+//    
+        ofxPanel co2panel;
+        ofParameter < bool > bUseCo2;
+        ofParameter < int > minutesBetweenC02;
+        ofParameter < bool > resetTimer;
+        ofParameter < bool > fireSoon;
+        ofParameter < bool > fireNow;
+        ofParameter < int > nFramesHighToFire;
+    
+        int lastC02event;
+        int nextC02eventTime;
+        int nFramesGoodForC02;
+    
+    
+//
+//
+//    
     
     
     

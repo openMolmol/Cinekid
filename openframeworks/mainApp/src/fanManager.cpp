@@ -28,7 +28,8 @@ void fanManager::setup(){
     
     panel.setup("fan control");
     panel.add(allOn.setup("all on", false));
-  
+    panel.add(bManual.setup("manual control", false));
+    
     
     serial.listDevices();
     devices = serial.getDeviceList();
@@ -76,13 +77,13 @@ void fanManager::setup(){
 
 void fanManager::setStrength( int person, float strength ){
     
-    strength = powf(strength, 1.6);
+    strength = powf(strength, 3.0);
     for (int i = 0; i < 12; i++){
         if (i < (int)(strength * 12)){
             
-            if (person == 0) energyPerFan[order0[i]] = 1.0;
-            if (person == 1) energyPerFan[order1[i]] = 1.0;
-            if (person == 2) energyPerFan[order2[i]] = 1.0;
+            if (person == 0) energyPerFan[order0[i]-1] = 1.0;
+            if (person == 1) energyPerFan[order1[i]-1] = 1.0;
+            if (person == 2) energyPerFan[order2[i]-1] = 1.0;
             
             //relayPins[i] = true;
         } else {
@@ -109,16 +110,18 @@ void fanManager::setStrength(float strength){
 
 void fanManager::computeFanEnergy(){
     
-//    for (int i= 0; i < 12; i++){
-//        energyPerFan[i] *= 0.96;
-//        
-//        cout << i << " --- " << energyPerFan[i] << endl;
-//        if (energyPerFan[i] > 0.2){
-//            relayPins[i] = true;
-//        } else {
-//            relayPins[i] = false;
-//        }
-//    }
+    if (!bManual){
+    for (int i= 0; i < 12; i++){
+        energyPerFan[i] *= 0.7;
+        
+        //cout << i << " --- " << energyPerFan[i] << endl;
+        if (energyPerFan[i] > 0.2){
+            relayPins[i] = true;
+        } else {
+            relayPins[i] = false;
+        }
+    }
+    }
 }
 
 
@@ -148,7 +151,8 @@ void fanManager::update(){
             if (bOn){
                 arduino.sendDigital(pinIds[i], 1);
             }else {
-                arduino.sendDigital(pinIds[i], 0);
+                if (i!= 2 && i!=6  && i != 9 && i != 8) arduino.sendDigital(pinIds[i], 0);
+                else arduino.sendDigital(pinIds[i], 1);  // only off for broken fans
             }
         }
     }

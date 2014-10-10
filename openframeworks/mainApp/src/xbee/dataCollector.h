@@ -163,9 +163,10 @@ public:
     }
 
     void draw(ofRectangle bounds){
-        ofDrawBitmapStringHighlight(serialName, ofPoint(bounds.x, bounds.y-20));
-        ofDrawBitmapStringHighlight(ofToString(nBytesRecvd),ofPoint(bounds.x, bounds.y-40));
-        ofDrawBitmapStringHighlight(deviceNumber,ofPoint(bounds.x, bounds.y-60), ofColor::white, ofColor::darkMagenta);
+        
+        //ofDrawBitmapStringHighlight(serialName, ofPoint(bounds.x, bounds.y-20));
+        //ofDrawBitmapStringHighlight(ofToString(nBytesRecvd),ofPoint(bounds.x, bounds.y-40));
+        ofDrawBitmapStringHighlight(deviceNumber,ofPoint(bounds.x, bounds.y-40), ofColor::magenta, ofColor::white);
         for (int i = 0; i < 4; i++){
             ofRectangle newBounds;
             newBounds.x = bounds.x;

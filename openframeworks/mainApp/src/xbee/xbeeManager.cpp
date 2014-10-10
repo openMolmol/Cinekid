@@ -48,10 +48,6 @@ void xbeeManager::setup(){
     panel.setup("data processing");
     //panel.add(useOsc.setup("use osc", false));
     
-    panel.add(minStrength.set("minStrength", 0, 0, 1000));
-    panel.add(maxStrength.set("maxStrength", 500, 0, 1000));
-    panel.add(shaper.set("shaper", 1, 0.3, 3.0));
-    
     
     for (int i = 0; i < nSerials; i++){
         panel.add(mins[i].set("min" + ofToString(i), 0, 0, 1024));
@@ -64,10 +60,14 @@ void xbeeManager::setup(){
     panel.add(dynamicChangeRate.set("dyn change rate", 0.9, 0.9, 1.0));
     
     for (int i = 0; i < nSerials; i++){
-        panel.add(bUseDevices[i].set("use device" + ofToString(i), true));
+        panel.add(bUseDevices[i].set("use " + dataCollectors[i].deviceNumber, true));
     }
     
+    for (int i = 0; i < nSerials; i++){
+        panel.add(bUse9dofInsteadOfMuscle[i].set("9dof->muscle " + dataCollectors[i].deviceNumber,false));
+    }
     
+    //panel.loadFromFile("xbeePanelSettings.xml");
     //sender.setup(OSC_IP, OSC_PORT);
     
     //#define OSC_IP "127.0.0.1"
@@ -92,7 +92,7 @@ void xbeeManager::update(){
             float min = dataCollectors[i].getMin();
             float max = dataCollectors[i].getMax();
             
-            cout << i << " " << min << " " << max << endl;
+            //cout << i << " " << min << " " << max << endl;
             
             if (min >= 0.0){
                 dataCollectors[i].sets[0].min = (dynamicChangeRate) *  dataCollectors[i].sets[0].min +
@@ -165,8 +165,24 @@ void xbeeManager::update(){
                                      *(dataCollectors[i].sets[2].values.end()-2);
                         
                         
-                        statList[i].nineDofEnergy = 0.97f * statList[i].nineDofEnergy +
-                                                    0.03f * (fabs(dx1 + dx2 + dx3) / 3.0);
+                        statList[i].nineDofEnergy = 0.92f * statList[i].nineDofEnergy +
+                                                    0.08f * (fabs(dx1 + dx2 + dx3) / 3.0);
+                        
+                        
+                        if (bUse9dofInsteadOfMuscle[i]){
+                            
+                            dataCollectors[i].sets[0].dataName = "muscle (9dof)";
+                            
+                            
+                            dataCollectors[i].sets[0].values[dataCollectors[i].sets[0].values.size()-1] =  statList[i].nineDofEnergy * 15.0; //
+                            
+                            dataCollectors[i].sets[0].currentvalue =statList[i].nineDofEnergy * 15.0; //
+
+                            
+                        } else {
+                            dataCollectors[i].sets[0].dataName = "muscle";
+                            
+                        }
                         
                         
                     }
@@ -190,10 +206,7 @@ void xbeeManager::update(){
         
         int nDevicesToUse = 3;
         
-        float valsToSend[3];
-        for (int i = 0; i < 3; i++){
-            valsToSend[i] = 0;
-        }
+      
         
         
         
@@ -209,9 +222,10 @@ void xbeeManager::update(){
                 }
                 if (i < 3) {
                     if(bUseDevices[i]){
-                        valsToSend[i] = ofMap(curValue, mins[i], maxs[i], 0, 1.0, true);
+                        statList[i].energy = ofMap(curValue, mins[i], maxs[i], 0, 1.0, true);
+                        cout << statList[i].energy << " " << curValue << " " << mins[i] << " " << " " << maxs[i] << endl;
                     } else {
-                        valsToSend[i] = 0;
+                        statList[i].energy = 0;
                     }
                 }
                 //cout << i << " " << ofMap(curValue, mins[i], maxs[i], 0, 1.0, true) << endl;
@@ -224,23 +238,10 @@ void xbeeManager::update(){
             
         overallEnergy = energy;
             float sendValue = energy;
-            
-            
-//            sendValue = powf(sendValue, shaper);
-//            
-//            //ToSend = 0.97f * ToSend + 0.03 * sendValue;
-//            sendMessage = "sending " + ofToString(sendValue, 4) + "\n" + ofToString(valsToSend[0]) + "\n" + ofToString(valsToSend[1]) + "\n" + ofToString(valsToSend[2]) + "\n";
-//            
-//            ofxOscMessage message;
-//            message.setAddress("/strength");
-//            message.addFloatArg(sendValue);
-//            message.addFloatArg(valsToSend[0]);
-//            message.addFloatArg(valsToSend[1]);
-//            message.addFloatArg(valsToSend[2]);
-//        
-//            sender.sendMessage(message);
-//            
+    
         
+        
+
         
         /*
         if (dataCollectors[0].sets[0].values.size() > 0){

@@ -1,0 +1,18 @@
+<data_processing>
+	<min0>0</min0>
+	<max0>1024</max0>
+	<min1>0</min1>
+	<max1>1024</max1>
+	<min2>146.887</min2>
+	<max2>246.887</max2>
+	<calc_dynamic_min_max>1</calc_dynamic_min_max>
+	<max_over_min>100</max_over_min>
+	<dyn_history_len>100</dyn_history_len>
+	<dyn_change_rate>0.9</dyn_change_rate>
+	<use_xbee:_11>1</use_xbee:_11>
+	<use_xbee:_10>1</use_xbee:_10>
+	<use_xbee:_9>1</use_xbee:_9>
+	<9dof-_muscle_xbee:_11>0</9dof-_muscle_xbee:_11>
+	<9dof-_muscle_xbee:_10>0</9dof-_muscle_xbee:_10>
+	<9dof-_muscle_xbee:_9>0</9dof-_muscle_xbee:_9>
+</data_processing>

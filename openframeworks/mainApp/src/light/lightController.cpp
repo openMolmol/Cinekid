@@ -11,6 +11,11 @@
 
 void lightController::setup(){
     dmx.connect("tty.usbserial-EN149955", 512); // use the name
+    
+    startTimeA = 0;
+    durationA = 100;
+    bOnA = false;
+
 }
 void lightController::setColor(int location, ofColor color){
     int i = location;
@@ -38,6 +43,27 @@ void lightController::update(){
 //        dmx.setLevel(3+ i * 5, 255);
 //        dmx.setLevel(4+ i * 5, 255);
 //	}
+    
+    
+    if (bOnA){
+        
+        dmx.setLevel(127, 255);
+        dmx.setLevel(128, 255);
+        dmx.setLevel(129, 255);
+    } else {
+        dmx.setLevel(127, 0);
+        dmx.setLevel(128, 0);
+        dmx.setLevel(129, 0);
+    }
+
+    
+    if (bOnA == true){
+        
+        if ( (ofGetElapsedTimeMillis() - startTimeA) > durationA){
+            
+            bOnA = false;
+        }
+    }
     
     dmx.update();
     
