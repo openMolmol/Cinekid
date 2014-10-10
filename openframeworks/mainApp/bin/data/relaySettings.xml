@@ -3,66 +3,62 @@
 	<pins>
 		<pin>
 			<num>2</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
 		<pin>
 			<num>3</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
 		<pin>
 			<num>4</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
         <pin>
 			<num>5</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
         <pin>
 			<num>6</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
         <pin>
 			<num>7</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
         
         <pin>
 			<num>8</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
         <pin>
 			<num>9</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
         
         <pin>
 			<num>10</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
         <pin>
 			<num>11</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
         <pin>
 			<num>12</num>
-			<flipOnOff>true</flipOnOff>
+			<flipOnOff>false</flipOnOff>
             <defaultState>false</defaultState>
 		</pin>
-        <pin>
-			<num>13</num>
-			<flipOnOff>true</flipOnOff>
-            <defaultState>false</defaultState>
-		</pin>
+
         
         
         

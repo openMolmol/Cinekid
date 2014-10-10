@@ -69,7 +69,7 @@ void fanManager::setup(){
         
     }
     
-    for (int i= 0; i < 12; i++){
+    for (int i= 0; i < relayPins.size(); i++){
         energyPerFan[i] = 0;
     }
 }
@@ -78,8 +78,8 @@ void fanManager::setup(){
 void fanManager::setStrength( int person, float strength ){
     
     strength = powf(strength, 3.0);
-    for (int i = 0; i < 12; i++){
-        if (i < (int)(strength * 12)){
+    for (int i = 0; i < relayPins.size(); i++){
+        if (i < (int)(strength * relayPins.size())){
             
             if (person == 0) energyPerFan[order0[i]-1] = 1.0;
             if (person == 1) energyPerFan[order1[i]-1] = 1.0;
@@ -111,7 +111,7 @@ void fanManager::setStrength(float strength){
 void fanManager::computeFanEnergy(){
     
     if (!bManual){
-    for (int i= 0; i < 12; i++){
+    for (int i= 0; i < relayPins.size(); i++){
         energyPerFan[i] *= 0.7;
         
         //cout << i << " --- " << energyPerFan[i] << endl;
@@ -151,8 +151,8 @@ void fanManager::update(){
             if (bOn){
                 arduino.sendDigital(pinIds[i], 1);
             }else {
-                if (i!= 2 && i!=6  && i != 9 && i != 8) arduino.sendDigital(pinIds[i], 0);
-                else arduino.sendDigital(pinIds[i], 1);  // only off for broken fans
+                 arduino.sendDigital(pinIds[i], 0);
+                //else arduino.sendDigital(pinIds[i], 1);  // only off for broken fans
             }
         }
     }
