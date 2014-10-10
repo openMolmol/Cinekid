@@ -72,7 +72,30 @@ void fanManager::setup(){
     for (int i= 0; i < relayPins.size(); i++){
         energyPerFan[i] = 0;
     }
+    
 }
+
+
+void fanManager::setRelayPin(int pin, bool bOn){
+    
+    bool bOnNow = relayPins[pin];
+    
+    
+    int diffTime = ofGetElapsedTimeMillis() - pinLastChangeTime[pin];
+    
+    
+    if (bOn != bOnNow){
+        
+        if (diffTime > 1000){
+            pinLastChangeTime[pin] = ofGetElapsedTimeMillis();
+            relayPins[pin] = bOn;
+
+            
+        }
+    }
+    
+}
+
 
 
 void fanManager::setStrength( int person, float strength ){
@@ -85,10 +108,11 @@ void fanManager::setStrength( int person, float strength ){
             if (person == 1) energyPerFan[order1[i]-1] = 1.0;
             if (person == 2) energyPerFan[order2[i]-1] = 1.0;
             
+            //setRelayPin(i, true);
             //relayPins[i] = true;
         } else {
             
-            ;//
+            //setRelayPin(i, false);
             //relayPins[i] = false;
         }
     }
@@ -100,9 +124,14 @@ void fanManager::setStrength( int person, float strength ){
 void fanManager::setStrength(float strength){
     for (int i = 0; i < relayPins.size(); i++){
         if (i < (int)(strength * relayPins.size())){
-            relayPins[i] = true;
+            
+            
+            //setRelayPin(i, true);
+            //relayPins[i] = true;
         } else {
-            relayPins[i] = false;
+            
+            //setRelayPin(i, false);
+            //relayPins[i] = false;
         }
     }
 }
@@ -116,9 +145,13 @@ void fanManager::computeFanEnergy(){
         
         //cout << i << " --- " << energyPerFan[i] << endl;
         if (energyPerFan[i] > 0.2){
-            relayPins[i] = true;
+            
+            setRelayPin(i, true);
+            //relayPins[i] = true;
         } else {
-            relayPins[i] = false;
+            
+            setRelayPin(i, false);
+            //relayPins[i] = false;
         }
     }
     }
@@ -128,16 +161,22 @@ void fanManager::computeFanEnergy(){
 
 void fanManager::update(){
     
+    cout << "bAllOnLastFrame " << " " << allOn << " " << bAllOnLastFrame << endl;
     
-    if (allOn != bAllOnLastFrame){
+    if ((bool)allOn != bAllOnLastFrame){
         
         for (int i = 0; i < relayPins.size(); i++){
-            relayPins[i] = allOn;
+            
+            //cout << " ??? " << endl;
+            
+            setRelayPin(i, allOn);
+            //relayPins[i] = allOn;
+            
         }
         
     }
     
-    bAllOnLastFrame = allOn;
+    bAllOnLastFrame = (bool)allOn;
     
     
     arduino.update();
@@ -149,13 +188,21 @@ void fanManager::update(){
             bool bOn = relayPins[i];
             if (bFlipMes[i] == true) bOn = !bOn;
             if (bOn){
+                
+                
                 arduino.sendDigital(pinIds[i], 1);
-            }else {
-                 arduino.sendDigital(pinIds[i], 0);
+            
+            } else {
+                
+                
+                arduino.sendDigital(pinIds[i], 0);
                 //else arduino.sendDigital(pinIds[i], 1);  // only off for broken fans
             }
         }
     }
+    
+    
+   
     
 }
 

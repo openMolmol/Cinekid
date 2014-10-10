@@ -24,6 +24,14 @@ public:
     vector < int > pinIds;
     vector < bool > bFlipMes;
     
+    int pinLastChangeTime[12];
+    bool bOnLastFrame[12];
+    
+    
+    void setRelayPin(int pin, bool bOn);
+    
+    
+    
     void setStrength(float strength);
     
     
