@@ -60,7 +60,7 @@ void fanManager::setup(){
         bFlipMes.push_back(xml.getValue("flipOnOff", "true") == "true" ? true : false);
         bool bDefaultState = xml.getValue("defaultState", "true") == "true" ? true : false;
         
-        panel.add(relayPins[relayPins.size()-1].set("fan id " + ofToString(i) + " pin " + ofToString(xml.getValue("num", 0)), bDefaultState));
+        panel.add(relayPins[relayPins.size()-1].set("fan id " + ofToString(i+1) + " pin " + ofToString(xml.getValue("num", 0)), bDefaultState));
         arduino.sendDigitalPinMode(pinIds[i],ARD_OUTPUT);
         
         xml.popTag();
