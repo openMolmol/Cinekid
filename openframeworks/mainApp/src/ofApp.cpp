@@ -44,8 +44,8 @@ void ofApp::setup(){
     lastC02event = ofGetElapsedTimeMillis();
     nextC02eventTime = ofGetElapsedTimeMillis() + (minutesBetweenC02 * 60 * 1000);
     
-    cout << minutesBetweenC02 << endl;
-    cout << nextC02eventTime << endl;
+    //cout << minutesBetweenC02 << endl;
+    //cout << nextC02eventTime << endl;
     //std::exit(0);
 }
 
@@ -334,27 +334,35 @@ void ofApp::keyPressed(int key){
         
         // todo save and load settings
         
-//        XM.panel.saveToFile("xbeePanelSettings.xml");
-//        
-//        string fileName = ofToDataPath("xbeePanelSettings.xml");
-//        string cmd = "sed '/\\/>/d' " + fileName + " > " + fileName + ".fix";
-//        system(cmd.c_str());
-//        cmd = "mv " +  fileName + ".fix" + " " + fileName;
-//        system(cmd.c_str());
-//        
-//        
-//        FM.panel.saveToFile("fanPanelSettings.xml");
-//        
-//        fileName = ofToDataPath("fanPanelSettings.xml");
-//        cmd = "sed '/\\/>/d' " + fileName + " > " + fileName + ".fix";
-//        system(cmd.c_str());
-//        cmd = "mv " +  fileName + ".fix" + " " + fileName;
-//        system(cmd.c_str());
+        XM.panel.saveToFile("xbeePanelSettings.xml");
         
+        string fileName = ofToDataPath("xbeePanelSettings.xml");
+        string cmd = "sed '/\\/>/d' " + fileName + " > " + fileName + ".fix";
+        system(cmd.c_str());
+        cmd = "mv " +  fileName + ".fix" + " " + fileName;
+        system(cmd.c_str());
+        
+        
+        FM.panel.saveToFile("fanPanelSettings.xml");
+        
+        fileName = ofToDataPath("fanPanelSettings.xml");
+        cmd = "sed '/\\/>/d' " + fileName + " > " + fileName + ".fix";
+        system(cmd.c_str());
+        cmd = "mv " +  fileName + ".fix" + " " + fileName;
+        system(cmd.c_str());
+        
+        SM.panel.saveToFile("soundSettings.xml");
+        
+        fileName = ofToDataPath("soundSettings.xml");
+        cmd = "sed '/\\/>/d' " + fileName + " > " + fileName + ".fix";
+        system(cmd.c_str());
+        cmd = "mv " +  fileName + ".fix" + " " + fileName;
+        system(cmd.c_str());
     }
     
     XM.keyPressed(key);
-    SM.keyPressed(key);
+
+    
 }
 
 //--------------------------------------------------------------

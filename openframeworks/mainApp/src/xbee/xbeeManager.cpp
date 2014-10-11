@@ -37,7 +37,7 @@ void xbeeManager::setup(){
         dataCollectors.push_back(DD);
         dataCollectors[dataCollectors.size()-1].setupData();
         dataCollectors[dataCollectors.size()-1].serialName = serialDeviceName;
-        dataCollectors[dataCollectors.size()-1].deviceNumber = "xbee: " + ofToString(serialDeviceNumber);
+        dataCollectors[dataCollectors.size()-1].deviceNumber = "xbee_" + ofToString(serialDeviceNumber);
         XML.popTag();
     }
     XML.popTag();
@@ -54,20 +54,20 @@ void xbeeManager::setup(){
         panel.add(maxs[i].set("max" + ofToString(i), 1024, 0, 1024));
     }
     
-    panel.add(calDynamicMinMax.setup("calc dynamic min max", false));
-    panel.add(maxOverMinDynamicRange.set("max over min", 100, 0, 1000));
-    panel.add(dynamicHistoryLength.set("dyn history len", 100, 0, 2000));
-    panel.add(dynamicChangeRate.set("dyn change rate", 0.9, 0.9, 1.0));
+    panel.add(calDynamicMinMax.setup("dynamic_min_max", false));
+    panel.add(maxOverMinDynamicRange.set("max_over_min", 100, 0, 1000));
+    panel.add(dynamicHistoryLength.set("dyn_history_len", 100, 0, 2000));
+    panel.add(dynamicChangeRate.set("dyn_change_rate", 0.9, 0.9, 1.0));
     
     for (int i = 0; i < nSerials; i++){
-        panel.add(bUseDevices[i].set("use " + dataCollectors[i].deviceNumber, true));
+        panel.add(bUseDevices[i].set("use_" + dataCollectors[i].deviceNumber, true));
     }
     
     for (int i = 0; i < nSerials; i++){
-        panel.add(bUse9dofInsteadOfMuscle[i].set("9dof->muscle " + dataCollectors[i].deviceNumber,false));
+        panel.add(bUse9dofInsteadOfMuscle[i].set("nine_dof_muscle_" + dataCollectors[i].deviceNumber,false));
     }
     
-    //panel.loadFromFile("xbeePanelSettings.xml");
+    panel.loadFromFile("xbeePanelSettings.xml");
     //sender.setup(OSC_IP, OSC_PORT);
     
     //#define OSC_IP "127.0.0.1"

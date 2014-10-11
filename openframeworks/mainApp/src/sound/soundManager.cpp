@@ -1,10 +1,12 @@
 #include "soundManager.h"
+#include "ofxXmlSettings.h"
+
 
 //--------------------------------------------------------------
 void soundManager::setup(){
 
     
-    panel.setup("sound");
+    panel.setup("sound settings");
     
     
     panel.add(grainsPerSecond.set("grainsPerSecond", 200, 0, 500.0));
@@ -19,7 +21,26 @@ void soundManager::setup(){
     
     panel.add(soundHitShaper.set("soundHitShaper", 6.3, 0,10.0));
     
+    
+    
+    ofxXmlSettings settings;
+    settings.loadFile("soundSettings.xml");
+    grainsPerSecond = settings.getValue("sound_settings:grainsPerSecond", 0);
+    avgFreq = settings.getValue("sound_settings:avgFreq", 0);
+    avgFreqSpread = settings.getValue("sound_settings:avgFreqSpread", 0);
+    avgGrainLength = settings.getValue("sound_settings:avgGrainLength", 0);
+    avgGrainSpreadLength = settings.getValue("sound_settings:avgGrainSpreadLength", 0);
+    avgVolume = settings.getValue("sound_settings:avgVolume", 0.0);
+    avgVolumeSpread = settings.getValue("sound_settings:avgVolumeSpread", 0.0);
+    maxVolume = settings.getValue("sound_settings:maxVolume", 0.0);
+    actualVolume = settings.getValue("sound_settings:actualVolume", 0.0);
+    soundHitShaper = settings.getValue("sound_settings:soundHitShaper", 0.0);
+    
     panel.loadFromFile("soundsSettings.xml");
+    
+    
+    
+    
     
     panel.setPosition(250,50);
     
@@ -86,7 +107,5 @@ void soundManager::draw(){
 void soundManager::keyPressed(int key){
 
   //  cout << key << endl;
-    if (key == 's'){
-        panel.saveToFile("soundSettings.xml");
-    }
+  
 }

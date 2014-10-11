@@ -1,24 +1,12 @@
-<group>
-	<grainsPerSecond>200</grainsPerSecond>
-	<avgFreq>30</avgFreq>
-	<avgFreqSpread>10</avgFreqSpread>
-	<avgGrainLength>50</avgGrainLength>
-	<avgGrainSpreadLength>10</avgGrainSpreadLength>
-	<avgVolume>0.01</avgVolume>
-	<avgVolumeSpread>0.005</avgVolumeSpread>
-	<maxVolume>0</maxVolume>
-	<actualVolume>0</actualVolume>
-	<soundHitShaper>6.3</soundHitShaper>
-<sound>
-		<grainsPerSecond>200</grainsPerSecond>
-		<avgFreq>30</avgFreq>
+<sound_settings>
+		<grainsPerSecond>205</grainsPerSecond>
+		<avgFreq>23</avgFreq>
 		<avgFreqSpread>10</avgFreqSpread>
-		<avgGrainLength>50</avgGrainLength>
-		<avgGrainSpreadLength>10</avgGrainSpreadLength>
-		<avgVolume>0.01</avgVolume>
-		<avgVolumeSpread>0.005</avgVolumeSpread>
-		<maxVolume>0</maxVolume>
+		<avgGrainLength>132</avgGrainLength>
+		<avgGrainSpreadLength>67</avgGrainSpreadLength>
+		<avgVolume>0.198</avgVolume>
+		<avgVolumeSpread>0.20925</avgVolumeSpread>
+		<maxVolume>0.51</maxVolume>
 		<actualVolume>0</actualVolume>
 		<soundHitShaper>6.3</soundHitShaper>
-	</sound>
-</group>
+</sound_settings>
