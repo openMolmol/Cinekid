@@ -161,7 +161,7 @@ void fanManager::computeFanEnergy(){
 
 void fanManager::update(){
     
-    cout << "bAllOnLastFrame " << " " << allOn << " " << bAllOnLastFrame << endl;
+    //cout << "bAllOnLastFrame " << " " << allOn << " " << bAllOnLastFrame << endl;
     
     if ((bool)allOn != bAllOnLastFrame){
         
