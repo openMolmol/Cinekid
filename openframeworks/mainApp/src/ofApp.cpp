@@ -115,18 +115,21 @@ void ofApp::update(){
     
     overallEnergyChange = overallEnergySmoothLastFrame-overallEnergySmooth;
     
+    if (nFramesNoEnergyChange > 100 && overallEnergySmooth < 0.05){
+        noEnergyChangeEnergy = noEnergyChangeEnergy * 0.99 + 0.01 * 1.0;
+    } else {
+        
+        noEnergyChangeEnergy = noEnergyChangeEnergy * 0.99 + 0.01 * 0.0;
+    }
+    
+    
     if (fabs(overallEnergyChange) < 0.001){
             nFramesNoEnergyChange++;
         } else {
             nFramesNoEnergyChange = 0;
         }
         
-        if (nFramesNoEnergyChange > 100 && overallEnergySmooth < 0.05){
-            noEnergyChangeEnergy = noEnergyChangeEnergy * 0.99 + 0.01 * 1.0;
-        } else {
-            
-            noEnergyChangeEnergy = noEnergyChangeEnergy * 0.99 + 0.01 * 0.0;
-        }
+    
 
         
         // TODO param
@@ -154,9 +157,9 @@ void ofApp::update(){
     //-------------------------------------------------------------
     // light
     
-    ofColor a = ofColor(0,250,154); // aqua
-    ofColor b = ofColor(127,255,0); // spring green
-    ofColor c = ofColor(238,130,238);   // violet
+    ofColor a = ofColor(0,250,250); // aqua
+    ofColor b = ofColor(180,255,0); // spring green
+    ofColor c = ofColor(255,80,255);   // violet
     
     
     //ofColor a =ofColor::green;
@@ -208,7 +211,7 @@ void ofApp::update(){
     while(angle < 0) angle += TWO_PI;
     
     
-    crazyAngle += ofMap(powf(overallEnergySmooth, 3.0), 0,1.0, 0.1, 0.6);
+    crazyAngle += ofMap(powf(overallEnergySmooth, 3.0), 0,1.0, 0.1, 0.45);
     while(crazyAngle > TWO_PI) crazyAngle -= TWO_PI;
     while(crazyAngle < 0) crazyAngle += TWO_PI;
     
@@ -233,7 +236,7 @@ void ofApp::update(){
             float onPulse = crazyAmount * onValue + (1-crazyAmount) * pct;
             
             
-            float newVal = onPulse * ((255 * noEnergyChangeEnergy) +  (1-noEnergyChangeEnergy) * ( 80 + powf(overallEnergySmooth,2.0) * (255-80)));
+            float newVal = onPulse * ((255 * noEnergyChangeEnergy) +  (1-noEnergyChangeEnergy) * ( 200 + powf(overallEnergySmooth,2.0) * (255-200)));
             
             
              newVal = ofMap( powf(sin(ofGetElapsedTimeMillis()/800.0)*0.5+0.5, 3.0), 0,1, newVal, newVal - newVal * noEnergyChangeEnergy);

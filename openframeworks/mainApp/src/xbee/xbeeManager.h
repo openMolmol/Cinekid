@@ -69,6 +69,7 @@ class xbeeManager {
         ofParameter< float > maxOverMinDynamicRange;
         ofParameter< float > dynamicHistoryLength;
         ofParameter< float > dynamicChangeRate;
+        ofParameter< float > dynamicMaxChangeRate;
 
         ofParameter < bool > bUseDevices[5];
         ofParameter < bool > bUse9dofInsteadOfMuscle[5];

@@ -82,6 +82,10 @@ public:
         } else {
             
             vector < float > temp = strengthHistory;
+            
+            //cout << temp[0] << " ??? " << endl;
+            //cout << temp.size() << endl;
+            
             ofSort(temp);
             float avgMin = 0;
             for (int i = 0; i < temp.size()*0.15; i++){
@@ -123,6 +127,9 @@ public:
         
     }
     
+    
+    
+    
     void parseMessage(string & message){
         
         vector < string > vals = ofSplitString(message, ",");
@@ -134,11 +141,9 @@ public:
         addVal( ofToFloat(vals[1]), ofToFloat(vals[2])/1000.0, ofToFloat(vals[3])/1000.0, ofToFloat(vals[4])/1000.0 );
         
         // todo optimize
+        //cout << "adding to str hist " << ofToFloat(vals[1]) << endl;
         
-        strengthHistory.push_back(ofToFloat(vals[1]));
-        while (strengthHistory.size() > historyLength){
-            strengthHistory.erase(strengthHistory.begin());
-        }
+       
         
         //printf(" --> %f %f %f %f \n", ofToFloat(vals[1]), ofToFloat(vals[2])/1000.0, ofToFloat(vals[3])/1000.0, ofToFloat(vals[4])/1000.0 );
         //strength = 0.9f * strength + 0.1 * ofToFloat(vals[3]);

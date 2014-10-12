@@ -58,6 +58,7 @@ void xbeeManager::setup(){
     panel.add(maxOverMinDynamicRange.set("max_over_min", 100, 0, 1000));
     panel.add(dynamicHistoryLength.set("dyn_history_len", 100, 0, 2000));
     panel.add(dynamicChangeRate.set("dyn_change_rate", 0.9, 0.9, 1.0));
+    panel.add(dynamicMaxChangeRate.set("dyn_max_change_rate", 0.9, 0.9, 1.0));
     
     for (int i = 0; i < nSerials; i++){
         panel.add(bUseDevices[i].set("use_" + dataCollectors[i].deviceNumber, true));
@@ -92,7 +93,7 @@ void xbeeManager::update(){
             float min = dataCollectors[i].getMin();
             float max = dataCollectors[i].getMax();
             
-            //cout << i << " " << min << " " << max << endl;
+            //cout << "---- " << i << " " << min << " " << max << endl;
             
             if (min >= 0.0){
                 dataCollectors[i].sets[0].min = (dynamicChangeRate) *  dataCollectors[i].sets[0].min +
@@ -155,18 +156,18 @@ void xbeeManager::update(){
                         
                         
                         
-                        float dx1 =  *(dataCollectors[i].sets[2].values.end()-1) -
-                                     *(dataCollectors[i].sets[2].values.end()-2);
+                        float dx1 =  *(dataCollectors[i].sets[1].values.end()-1) -
+                                     *(dataCollectors[i].sets[1].values.end()-2);
                         
-                        float dx2 =  *(dataCollectors[i].sets[2].values.end()-1) -
-                                    *(dataCollectors[i].sets[2].values.end()-2);
-                        
-                        float dx3 =  *(dataCollectors[i].sets[2].values.end()-1) -
-                                     *(dataCollectors[i].sets[2].values.end()-2);
+//                        float dx2 =  *(dataCollectors[i].sets[2].values.end()-1) -
+//                                    *(dataCollectors[i].sets[2].values.end()-2);
+//                        
+//                        float dx3 =  *(dataCollectors[i].sets[2].values.end()-1) -
+//                                     *(dataCollectors[i].sets[2].values.end()-2);
                         
                         
                         statList[i].nineDofEnergy = 0.92f * statList[i].nineDofEnergy +
-                                                    0.08f * (fabs(dx1 + dx2 + dx3) / 3.0);
+                                                    0.08f * (fabs(dx1) / 1.0);
                         
                         
                         if (bUse9dofInsteadOfMuscle[i]){
@@ -177,6 +178,7 @@ void xbeeManager::update(){
                             dataCollectors[i].sets[0].values[dataCollectors[i].sets[0].values.size()-1] =  statList[i].nineDofEnergy * 15.0; //
                             
                             dataCollectors[i].sets[0].currentvalue =statList[i].nineDofEnergy * 15.0; //
+                            
 
                             
                         } else {
@@ -185,9 +187,19 @@ void xbeeManager::update(){
                         }
                         
                         
+                        // ------
+                        dataCollectors[i].strengthHistory.push_back(dataCollectors[i].sets[0].values[dataCollectors[i].sets[0].values.size()-1]);
+                        while ( dataCollectors[i].strengthHistory.size() > dynamicHistoryLength){
+                             dataCollectors[i].strengthHistory.erase( dataCollectors[i].strengthHistory.begin());
+                        }
+                        
+                        // ------
+
+                        
                     }
                     
-                    //cout << i << " --> " <<  messages[i] << endl;
+                    
+                                        //cout << i << " --> " <<  messages[i] << endl;
                     
                   
                     
@@ -217,13 +229,13 @@ void xbeeManager::update(){
             if (dataCollectors[i].sets[0].values.size() > 0){
                 float curValue = dataCollectors[i].sets[0].currentvalue;
                 if(bUseDevices[i]){
-                    energy += powf(ofMap(curValue, mins[i], maxs[i], 0, 1.0, true), 1.5) * 3.0;
+                    energy += powf(ofMap(curValue, mins[i], maxs[i], 0, 1.0, true), 1.5) *1.6;
                     countOfDev++;
                 }
                 if (i < 3) {
                     if(bUseDevices[i]){
                         statList[i].energy = ofMap(curValue, mins[i], maxs[i], 0, 1.0, true);
-                        cout << statList[i].energy << " " << curValue << " " << mins[i] << " " << " " << maxs[i] << endl;
+                        //cout << statList[i].energy << " " << curValue << " " << mins[i] << " " << " " << maxs[i] << endl;
                     } else {
                         statList[i].energy = 0;
                     }

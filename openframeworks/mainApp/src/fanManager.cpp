@@ -20,6 +20,8 @@ int order0[] = {11,10,12,6,7,5,8,9,4,2,1,3};
 int order1[] = {1,2,4,3,5,6,7,10,8,9,11,12};
 int order2[] = {3,2,9,8,1,6,12,11,4,5,11,10};
 
+//
+//bool bOnLastFrame[12];
 
 bool bAllOnLastFrame = false;
 
@@ -42,6 +44,7 @@ void fanManager::setup(){
         if (howMany > 0){
             whichDevice = i;
         }
+        bOnLastFrame[i] = false;
     }
     
     arduino.connect(devices[whichDevice].getDeviceName());
@@ -65,8 +68,6 @@ void fanManager::setup(){
         
         xml.popTag();
         
-        
-        
     }
     
     for (int i= 0; i < relayPins.size(); i++){
@@ -86,10 +87,20 @@ void fanManager::setRelayPin(int pin, bool bOn){
     
     if (bOn != bOnNow){
         
-        if (diffTime > 1000){
-            pinLastChangeTime[pin] = ofGetElapsedTimeMillis();
-            relayPins[pin] = bOn;
+        if (bOn == true){
+            if (diffTime > 4000){
+                pinLastChangeTime[pin] = ofGetElapsedTimeMillis();
+                relayPins[pin] = bOn;
 
+                
+            }
+        } else {
+            if (diffTime > 4000){
+                pinLastChangeTime[pin] = ofGetElapsedTimeMillis();
+                relayPins[pin] = bOn;
+                
+                
+            }
             
         }
     }
@@ -183,10 +194,21 @@ void fanManager::update(){
     
     //cout << arduino.isArduinoReady() << endl;
     
+    static bool bSentOffOnce = false;
+    
     if (ofGetFrameNum() > 60*4){        // wait some time after startup
         for (int i = 0; i < relayPins.size(); i++){
             bool bOn = relayPins[i];
+            
+            bool bDiff = false;
+            if (bOn != bOnLastFrame[i]){
+                bDiff = true;
+            }
+            if (bSentOffOnce) bDiff = true;
+            bOnLastFrame[i ]= bOn;
             if (bFlipMes[i] == true) bOn = !bOn;
+            
+            if (bDiff){
             if (bOn){
                 
                 
@@ -198,7 +220,9 @@ void fanManager::update(){
                 arduino.sendDigital(pinIds[i], 0);
                 //else arduino.sendDigital(pinIds[i], 1);  // only off for broken fans
             }
+            }
         }
+        bSentOffOnce = true;
     }
     
     
