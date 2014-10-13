@@ -88,14 +88,14 @@ void fanManager::setRelayPin(int pin, bool bOn){
     if (bOn != bOnNow){
         
         if (bOn == true){
-            if (diffTime > 4000){
+            if (diffTime > 20000){
                 pinLastChangeTime[pin] = ofGetElapsedTimeMillis();
                 relayPins[pin] = bOn;
 
                 
             }
         } else {
-            if (diffTime > 4000){
+            if (diffTime > 12000){
                 pinLastChangeTime[pin] = ofGetElapsedTimeMillis();
                 relayPins[pin] = bOn;
                 

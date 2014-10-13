@@ -36,7 +36,12 @@ void lightController::setColor(int location, ofPoint color){
 }
 void lightController::update(){
 
-    
+//    for (int i = 0; i < 18; i++){
+//        dmx.setLevel(1 + i * 5, 255);
+//        dmx.setLevel(2+ i * 5, 255);
+//        dmx.setLevel(3+ i * 5, 255);
+//        dmx.setLevel(4+ i * 5, 255);
+//	}
     
     
     if (bOnA){

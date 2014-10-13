@@ -3,7 +3,7 @@
     
     <device>
         <xbeeName>11</xbeeName>
-        <serial>tty.usbserial-DA011GDF</serial>
+        <serial>tty.usbserial-A40139LZ</serial>
     </device>
     
     <device>
@@ -12,7 +12,7 @@
     </device>
     
     <device>
-        <xbeeName>9</xbeeName>
+        <xbeeName>12</xbeeName>
         <serial>tty.usbserial-A702ZMKC</serial>
     </device>
     
