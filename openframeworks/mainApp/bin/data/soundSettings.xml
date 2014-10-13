@@ -7,6 +7,6 @@
 		<avgVolume>0.198</avgVolume>
 		<avgVolumeSpread>0.20925</avgVolumeSpread>
 		<maxVolume>0.38</maxVolume>
-		<actualVolume>0</actualVolume>
+		<actualVolume>0.0024486</actualVolume>
 		<soundHitShaper>7.55</soundHitShaper>
 </sound_settings>

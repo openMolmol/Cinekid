@@ -53,6 +53,9 @@ class ofApp : public ofBaseApp{
         xbeeManager XM;
     
     
+    float briForScreensaver[12];
+    float briForOn[12];
+    
     
         bool bDrawInput;
     
