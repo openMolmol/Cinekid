@@ -52,6 +52,10 @@ public:
         playerEnergy += energyAddAmount;
     }
     
+    void addEnergy( float amount ){
+        playerEnergy += amount;
+    }
+    
     void draw(){
         float w = 0;
         w = ofMap(playerEnergySmooth, 0, 6, minRectWidth, maxRectWidth, true);
@@ -111,6 +115,9 @@ public:
         startTimeA = ofGetElapsedTimeMillis();
     }
     
+    void addEnergy (int player, float energy);
+    
+    
     void setColor(int location, ofPoint color);
     void setColor(int location, ofColor color);
     
@@ -138,9 +145,23 @@ public:
     ofParameter < float > maxRectWidth;
     ofParameter < float > fadeToBlackRate;
 
+    ofParameter < float > energyAddScaleAmount;
+    ofParameter < float > energyAddShapeAmount;
+
+    
+    
     ofParameter < ofPoint > color1;
     ofParameter < ofPoint > color2;
     ofParameter < ofPoint > color3;
+    
+    
+    float screenSaverEnergy;
+    float screenSaverEnergyTarget;
+    
+    void setScreenSaver(bool bScr){
+        if (bScr == true) screenSaverEnergyTarget = 1;
+        else screenSaverEnergyTarget = 0;
+    }
     
     
     ofxBlur blur;

@@ -12,6 +12,9 @@ void ofApp::setup(){
     SM.setup();
     XM.setup();
     
+    
+    
+    
     ofSoundStreamSetup(2,0,this, 44100, 256, 4);
     
     angle = 0;
@@ -23,10 +26,8 @@ void ofApp::setup(){
     
     bDrawInput = true;
     
-    XM.panel.setPosition(600,30);
-    LC.panel.setPosition(800+20,30);
-    SM.panel.setPosition(1000+40,30);
-    FM.panel.setPosition(600,30 + 400);
+   
+    font.loadFont("OsakaMono.ttf", 55);
     
     
     
@@ -39,7 +40,10 @@ void ofApp::setup(){
     co2panel.add(nFramesHighToFire.set("n high frames to fire", 50, 1, 1000));
     
     
-    
+    XM.panel.setPosition(600,30);
+    LC.panel.setPosition(800+20,30);
+    SM.panel.setPosition(1000+40,30);
+    FM.panel.setPosition(600,30 + 400);
     co2panel.setPosition(1000+40, 400);
     
     lastC02event = ofGetElapsedTimeMillis();
@@ -48,6 +52,9 @@ void ofApp::setup(){
     //cout << minutesBetweenC02 << endl;
     //cout << nextC02eventTime << endl;
     //std::exit(0);
+    
+    
+    bDrawHelpScreen = true;
 }
 
 
@@ -57,6 +64,21 @@ static float crazyAngle = 0;
 //--------------------------------------------------------------
 void ofApp::update(){
     
+    
+    
+    if (bDrawHelpScreen){
+        XM.panel.setPosition(-2000+600,30);
+        LC.panel.setPosition(-2000+800+20,30);
+        SM.panel.setPosition(-2000+1000+40,30);
+        FM.panel.setPosition(-2000+600,30 + 400);
+        co2panel.setPosition(-2000+1000+40, 400);
+    } else {
+        XM.panel.setPosition(600,30);
+        LC.panel.setPosition(800+20,30);
+        SM.panel.setPosition(1000+40,30);
+        FM.panel.setPosition(600,30 + 400);
+        co2panel.setPosition(1000+40, 400);
+    }
     
     
     //--------------------------------------------------------------
@@ -89,7 +111,7 @@ void ofApp::update(){
         
         if (timeTillNext <= 0){
             if (nFramesGoodForC02 > nFramesHighToFire){
-                //LC.fireC02();
+                LC.fireC02();
                 nextC02eventTime = ofGetElapsedTimeMillis() + (minutesBetweenC02 * 60 * 1000);
             }
         }
@@ -128,6 +150,21 @@ void ofApp::update(){
     individEnergy[1] = 0.95f * individEnergy[1]  + 0.05 * XM.statList[1].energy;
     individEnergy[2] = 0.95f * individEnergy[2]  + 0.05 * XM.statList[2].energy;
     
+    
+    bool bUseAnyDevices = false;
+    for (int i = 0; i < 3; i++){
+        if (XM.bUseDevices[i] == true){
+            bUseAnyDevices = true;
+        }
+    }
+    LC.setScreenSaver(!bUseAnyDevices);
+
+    for (int i = 0; i < 3; i++){
+        if (XM.bUseDevices[i]){
+            LC.addEnergy(i,individEnergy[i]);
+        }
+    }
+    
     //--------------------------------------------------------------
     
     
@@ -135,7 +172,7 @@ void ofApp::update(){
     
     if (true){
         FM.setStrength(0, XM.statList[0].energy);
-        FM.setStrength(1,XM.statList[1].energy);
+        FM.setStrength(1, XM.statList[1].energy);
         FM.setStrength(2, XM.statList[2].energy);
     }
     
@@ -147,9 +184,9 @@ void ofApp::update(){
     //-------------------------------------------------------------
     // light
     
-    ofColor a = ofColor(0,250,250); // aqua
-    ofColor b = ofColor(180,255,0); // spring green
-    ofColor c = ofColor(255,80,255);   // violet
+    ofColor a = ofColor(LC.color1->x,LC.color1->y,LC.color1->z); // aqua
+    ofColor b = ofColor(LC.color2->x,LC.color2->y,LC.color2->z); // spring green
+    ofColor c = ofColor(LC.color3->x,LC.color3->y,LC.color3->z);   // violet
     
     ofColor aT = a;
     ofColor bT = b;
@@ -230,23 +267,23 @@ void ofApp::update(){
     
     
     //if (noEnergyChangeEnergy > 0.01){
-    a.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0 + TWO_PI/4), -1,1,  a.r,  a.r -  a.r * noEnergyChangeEnergy);
-    a.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/4), -1,1,  a.g,  a.g -  a.g * noEnergyChangeEnergy);
-    a.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/4), -1,1,  a.b,  a.b -  a.b * noEnergyChangeEnergy);
-    
-    b.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.r,  b.r -  b.r * noEnergyChangeEnergy);
-    b.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.g,  b.g -  b.g * noEnergyChangeEnergy);
-    b.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.b,  b.b -  b.b * noEnergyChangeEnergy);
-    
-    c.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.r,  c.r -  c.r * noEnergyChangeEnergy);
-    c.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.g,  c.g -  c.g * noEnergyChangeEnergy);
-    c.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.b,  c.b -  c.b * noEnergyChangeEnergy);
+//    a.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0 + TWO_PI/4), -1,1,  a.r,  a.r -  a.r * noEnergyChangeEnergy);
+//    a.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/4), -1,1,  a.g,  a.g -  a.g * noEnergyChangeEnergy);
+//    a.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/4), -1,1,  a.b,  a.b -  a.b * noEnergyChangeEnergy);
+//    
+//    b.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.r,  b.r -  b.r * noEnergyChangeEnergy);
+//    b.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.g,  b.g -  b.g * noEnergyChangeEnergy);
+//    b.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.b,  b.b -  b.b * noEnergyChangeEnergy);
+//    
+//    c.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.r,  c.r -  c.r * noEnergyChangeEnergy);
+//    c.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.g,  c.g -  c.g * noEnergyChangeEnergy);
+//    c.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.b,  c.b -  c.b * noEnergyChangeEnergy);
     
     //}
     
-    //LC.setColor(12,  a);
-    //LC.setColor(13,  b);
-    //LC.setColor(14,  c);
+    LC.setColor(12,  a);
+    LC.setColor(13,  b);
+    LC.setColor(14,  c);
     
     
     LC.update();
@@ -262,42 +299,52 @@ void ofApp::draw(){
     ofBackground(ofColor(100,100,60));
     
     
-        XM.draw();
     
+    
+    
+    ofPushMatrix();
+        if (bDrawHelpScreen){
+            ofTranslate(-2000,0);
+        } else {
+            ofTranslate(0,0);
+        }
+        ofDrawBitmapString("last c02: " +  ofToString(lastC02event / 1000.0, 3) , 1000+40, 600);
+        int timeTillNext =  nextC02eventTime - ofGetElapsedTimeMillis();
+        if (timeTillNext < 0) timeTillNext = 0;
+        ofDrawBitmapString("seconds till next c02: " +  ofToString(timeTillNext / 1000.0, 3) , 1000+40, 650);
+    
+    
+        XM.draw();
         SM.draw();
         FM.draw();
         LC.draw();
-        FM.panel.draw();
+    
+    
+    ofPopMatrix();
+    
+    
+        if (bDrawHelpScreen){
+            
+            font.drawString("10", 100, 200 - 40);
+            XM.dataCollectors[0].sets[0].draw( ofRectangle(100,200, 300, 150));
 
+            font.drawString("12", 100 + (300+25)*1, 200-40);
+            XM.dataCollectors[1].sets[0].draw( ofRectangle(100 + (300+25)*1,200, 300, 150));
+            
+            font.drawString("11", 100 + (300+25)*2,200-40);
+            XM.dataCollectors[2].sets[0].draw( ofRectangle(100 + (300+25)*2,200, 300, 150));
+            
+        }
+    
+    
+    
+    
+  
+    
+    
+    
+    FM.panel.draw();
     co2panel.draw();
-    
-        
-    ofDrawBitmapString("last c02: " +  ofToString(lastC02event / 1000.0, 3) , 1000+40, 600);
-    int timeTillNext =  nextC02eventTime - ofGetElapsedTimeMillis();
-    if (timeTillNext < 0) timeTillNext = 0;
-    //cout << ofGetElapsedTimeMillis() << " " << nextC02eventTime << endl;
-    
-    ofDrawBitmapString("seconds till next c02: " +  ofToString(timeTillNext / 1000.0, 3) , 1000+40, 650);
-    
-    
-    //lastC02event = ofGetElapsedTimef();
-    //nextC02eventTime = ofGetElapsedTimeMillis() + minutesBetweenC02 * 60 * 1000;
-    
-
-//    for (int i = 0; i < 12; i++){
-//        float w = ofGetWidth() / 12.0;
-//        ofSetColor(briForScreensaver[i]*255);
-//        ofFill();
-//        ofRect(i*w, 600, w, 20);
-//    
-//        ofSetColor(briForOn[i]*255);
-//        ofFill();
-//        ofRect(i*w, 600+20, w, 20);
-//        
-//        
-//    }
-    
-    
     
     
     
@@ -347,6 +394,8 @@ void ofApp::keyPressed(int key){
         system(cmd.c_str());
         cmd = "mv " +  fileName + ".fix" + " " + fileName;
         system(cmd.c_str());
+        
+        LC.panel.saveToFile("lightSettings.xml");
     }
     
     XM.keyPressed(key);
@@ -363,6 +412,10 @@ void ofApp::keyPressed(int key){
     
     if (key == 'r'){
         LC.p[2].addEnergy();
+    }
+    
+    if (key == 'd'){
+        bDrawHelpScreen = !bDrawHelpScreen;
     }
 }
 

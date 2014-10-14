@@ -1,12 +1,12 @@
 <sound_settings>
 		<grainsPerSecond>205</grainsPerSecond>
-		<avgFreq>29</avgFreq>
-		<avgFreqSpread>10</avgFreqSpread>
+		<avgFreq>24</avgFreq>
+		<avgFreqSpread>20</avgFreqSpread>
 		<avgGrainLength>132</avgGrainLength>
 		<avgGrainSpreadLength>67</avgGrainSpreadLength>
 		<avgVolume>0.198</avgVolume>
-		<avgVolumeSpread>0.20925</avgVolumeSpread>
-		<maxVolume>0.38</maxVolume>
-		<actualVolume>0.0024486</actualVolume>
-		<soundHitShaper>7.55</soundHitShaper>
+		<avgVolumeSpread>0.1395</avgVolumeSpread>
+		<maxVolume>0.385</maxVolume>
+		<actualVolume>9.71134e-10</actualVolume>
+		<soundHitShaper>7.45</soundHitShaper>
 </sound_settings>

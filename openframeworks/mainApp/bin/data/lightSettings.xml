@@ -1,0 +1,14 @@
+<group>
+	<playerEnergySlowRate>0.945</playerEnergySlowRate>
+	<playerEnergySmoothRate>0.946</playerEnergySmoothRate>
+	<energyAddAmount>2.2</energyAddAmount>
+	<minRectWidth>0</minRectWidth>
+	<maxRectWidth>23.5</maxRectWidth>
+	<fadeToBlackRate>0.024</fadeToBlackRate>
+	<color1>255, 188.648, 0</color1>
+	<color2>255, 0, 205.561</color2>
+	<color3>0, 255, 255</color3>
+	<energyAddScaleAmount>0.37135</energyAddScaleAmount>
+	<energyAddShapeAmount>1.7385</energyAddShapeAmount>
+<group/>
+</group>
