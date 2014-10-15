@@ -4,7 +4,7 @@
 #include "ofMain.h"
 #include "ofxDmx.h"
 #include "ofxGui.h"
-#include "ofxBlur.h"
+
 
 
 
@@ -29,7 +29,6 @@ public:
     float minRectWidth;
     float maxRectWidth;
     
-    
     void drawRectangleInFbo( ofRectangle rect, ofColor color);
     
     void setup(){
@@ -51,10 +50,6 @@ public:
     
     void addEnergy(){
         playerEnergy += energyAddAmount;
-    }
-    
-    void addEnergy( float amount ){
-        playerEnergy += amount;
     }
     
     void draw(){
@@ -111,18 +106,10 @@ public:
     void update();
     void draw();
     
-    
-    int colorMode;
- 
-    
-    
     void fireC02(){
         bOnA = true;
         startTimeA = ofGetElapsedTimeMillis();
     }
-    
-    void addEnergy (int player, float energy);
-    
     
     void setColor(int location, ofPoint color);
     void setColor(int location, ofColor color);
@@ -149,31 +136,12 @@ public:
     ofParameter < float > energyAddAmount;
     ofParameter < float > minRectWidth;
     ofParameter < float > maxRectWidth;
-    ofParameter < float > fadeToBlackRate;
-
-    ofParameter < float > energyAddScaleAmount;
-    ofParameter < float > energyAddShapeAmount;
-
-    
-    
     ofParameter < ofPoint > color1;
     ofParameter < ofPoint > color2;
     ofParameter < ofPoint > color3;
     
     
-    float screenSaverEnergy;
-    float screenSaverEnergyTarget;
-    
-    void setScreenSaver(bool bScr){
-        if (bScr == true) screenSaverEnergyTarget = 1;
-        else screenSaverEnergyTarget = 0;
-    }
-    
-    
-    ofxBlur blur;
-    
-    
-    player p[3];
+    player p[2];
 
     ofFbo lightStrip;
 };

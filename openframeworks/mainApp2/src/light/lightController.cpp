@@ -7,8 +7,6 @@
 //
 
 #include "lightController.h"
-#include "ofApp.h"
-
 
 
 void lightController::setup(){
@@ -18,15 +16,11 @@ void lightController::setup(){
     durationA = 100;
     bOnA = false;
     
-    screenSaverEnergy = 1;
-    screenSaverEnergyTarget = 1;
     
     
     lightStrip.allocate(120, 10, GL_RGBA32F);
     
-    //int radius = 32, float shape = .2, int passes = 1, float downsample = .5
-    blur.setup(120, 10, 16, 0.01, 1, 1.0);
-
+    
     
     lightStrip.begin();
     ofClear(0,0,0, 255);
@@ -35,13 +29,10 @@ void lightController::setup(){
     //   playerPos = 0;
     
     p[0].setup();
-    p[0].baseColor = ofColor::aqua;
+    p[0].baseColor = ofColor::green;
     
     p[1].setup();
     p[1].baseColor = ofColor::orange;
-    
-    p[2].setup();
-    p[2].baseColor = ofColor::cyan;
     
     
     panel.setup();
@@ -50,38 +41,20 @@ void lightController::setup(){
     panel.add(energyAddAmount.set("energyAddAmount", 5.0, 0.0, 20.0));
     panel.add(minRectWidth.set("minRectWidth", 4,0, 100));
     panel.add(maxRectWidth.set("maxRectWidth", 40.0, 0.0, 100.0));
-    
-    panel.add(fadeToBlackRate.set("fadeToBlackRate", 0.01, 0, 0.2));
-    
     panel.add(color1.set("color1", ofPoint(0,0,0), ofPoint(0,0,0), ofPoint(255,255,255)));
     panel.add(color2.set("color2", ofPoint(0,0,0), ofPoint(0,0,0), ofPoint(255,255,255)));
     panel.add(color3.set("color3", ofPoint(0,0,0), ofPoint(0,0,0), ofPoint(255,255,255)));
-    panel.add(energyAddScaleAmount.set("energyAddScaleAmount", 1, 0.01, 1.0));
-    panel.add(energyAddShapeAmount.set("energyAddShapeAmount", 1, 0.1, 3.0));
-   
-
     
     color1.set(ofPoint( ofColor::orange.r,ofColor::orange.g,ofColor::orange.b));
     color2.set(ofPoint( ofColor::red.r,ofColor::red.g,ofColor::red.b));
     color3.set(ofPoint( ofColor::aqua.r,ofColor::aqua.g,ofColor::aqua.b));
     
-    panel.loadFromFile("lightSettings.xml");
-    
-    colorMode = 0;
+    panel.loadFromFile("colorSettings.xml");
 
 
 }
 void lightController::setColor(int location, ofColor color){
     int i = location;
-    
-    
-    if (colorMode == 1){
-        color = ofColor::white;
-    } else if (colorMode == 2){
-        color = ofColor::black;
-    }
-    
-    
     dmx.setLevel(1 + i * 5, 255);
     dmx.setLevel(2+ i * 5, color.r);
     dmx.setLevel(3+ i * 5, color.g);
@@ -103,15 +76,6 @@ void lightController::drawRectangleInFbo( ofRectangle rect, ofColor color){
 
 void lightController::setColor(int location, ofPoint color){
     int i = location;
-    
-    if (colorMode == 1){
-        color = ofPoint(255,255,255);
-    } else if (colorMode == 2){
-        color = ofPoint(0,0,0);
-    }
-
-    
-    
     dmx.setLevel(1 + i * 5, 255);
     dmx.setLevel(2+ i * 5, color.x);
     dmx.setLevel(3+ i * 5, color.y);
@@ -119,15 +83,11 @@ void lightController::setColor(int location, ofPoint color){
 }
 void lightController::update(){
 
-    screenSaverEnergy = 0.99f * screenSaverEnergy + 0.01f * screenSaverEnergyTarget;
-    
-    
     
     p[0].baseColor.set( color1->x, color1->y, color1->z);
     p[1].baseColor.set( color2->x, color2->y, color2->z);
-    p[2].baseColor.set( color3->x, color3->y, color3->z);
     
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < 2; i++){
         p[i].update();
         p[i].playerEnergySmoothRate = playerEnergySmoothRate;
         p[i].playerEnergySlowRate = playerEnergySlowRate;
@@ -136,9 +96,9 @@ void lightController::update(){
         p[i].maxRectWidth = maxRectWidth;
     }
 
-    blur.begin();
+    lightStrip.begin();
     ofEnableAlphaBlending();
-    glColor4f(0,0,0, fadeToBlackRate);
+    glColor4f(0,0,0, 0.1);
     ofFill();
     ofRect(0,0,120,10);
     //ofClear(0,0,0,1);
@@ -149,21 +109,19 @@ void lightController::update(){
     
     p[0].draw();
     p[1].draw();
-    p[2].draw();
     
-    ofEnableBlendMode(OF_BLENDMODE_ADD);
-    if (p[0].playerEnergySmooth > 2.0 || p[1].playerEnergySmooth > 2.0 || p[2].playerEnergySmooth > 2.0){
-       drawRectangleInFbo( ofRectangle( ofRandom(0,120), 0, ofRandom(10,20), 30), ofColor(ofRandom(0,120), ofRandom(0,120), ofRandom(0,120), 200));
+    if (p[0].playerEnergySmooth > 4.0 || p[1].playerEnergySmooth > 4.0){
+        drawRectangleInFbo( ofRectangle( ofRandom(0,120), 0, ofRandom(10,20), 30), ofColor(ofRandom(0,255), ofRandom(0,255), ofRandom(0,255)));
     }
-    ofEnableAlphaBlending();
     
     
+    
     ofEnableAlphaBlending();
-    blur.end();
+    lightStrip.end();
     
     
     ofPixels pix;
-    blur.getTextureReference().readToPixels(pix);
+    lightStrip.readToPixels(pix);
     
     
     
@@ -184,35 +142,7 @@ void lightController::update(){
         }
         colorMix /= 100.0;
         
-        
-        //ofPoint col = colorMix;
-        
-        ofColor col;
-        col.r = colorMix.x;
-        col.g = colorMix.y;
-        col.b = colorMix.z;
-        
-        float hueShift = ofSignedNoise(ofGetElapsedTimeMillis()/400.0, i/10.0);
-        float satShift = ofSignedNoise(ofGetElapsedTimeMillis()/2000.0 + 10000.0, i/20.0);
-        float briShift = powf(ofNoise(ofGetElapsedTimeMillis()/500.0 - 10000.0, i/4.0), 2.3);
-        
-        ofColor colTemp ;
-        
-        colTemp.setHsb(  col.getHue(), ofClamp(col.getSaturation() + satShift*20, 0, 255), col.getBrightness() * (0.7 + 0.3*briShift));
-
-        ofPoint colTempAsPt;
-        colTempAsPt.x = colTemp.r;
-        colTempAsPt.y = colTemp.g;
-        colTempAsPt.z = colTemp.b;
-        
-        float xx  = ((ofApp*)ofGetAppPtr())->briForScreensaver[order[i]];
-        //cout << xx << endl;
-        ofPoint screenSaver(xx*255,xx*255,xx*255);
-        
-        colTempAsPt = screenSaverEnergy * screenSaver + (1-screenSaverEnergy) * colTempAsPt;
-        
-        
-        setColor(order[i] ,  colTempAsPt);
+        setColor(order[i] ,  colorMix);
         
     }
     
@@ -235,7 +165,7 @@ void lightController::update(){
     if (bOnA == true){
         
         if ( (ofGetElapsedTimeMillis() - startTimeA) > durationA){
-
+            
             bOnA = false;
         }
     }
@@ -244,20 +174,13 @@ void lightController::update(){
     
 }
 
-void lightController::addEnergy (int player, float energy){
-    energy = powf(energy, energyAddShapeAmount);
-    energy *= energyAddScaleAmount;
-    p[player].addEnergy(energy);
-}
-
-
 void lightController::draw(){
     
     
     
     ofDisableAlphaBlending();
     ofSetColor(255);
-    blur.getTextureReference().draw(0,ofGetHeight()-50, ofGetWidth(),  (lightStrip.getHeight() / lightStrip.getWidth()) * ofGetWidth());
+    lightStrip.draw(0,ofGetHeight()-50, ofGetWidth(),  (lightStrip.getHeight() / lightStrip.getWidth()) * ofGetWidth());
     ofEnableAlphaBlending();
     
     panel.draw();

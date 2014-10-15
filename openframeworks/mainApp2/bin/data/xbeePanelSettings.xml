@@ -1,0 +1,24 @@
+<data_processing>
+	<min0>1.00383</min0>
+	<max0>101.004</max0>
+	<min1>1.00383</min1>
+	<max1>101.004</max1>
+	<min2>82.8291</min2>
+	<max2>359.837</max2>
+	<dynamic_min_max>1</dynamic_min_max>
+	<max_over_min>100</max_over_min>
+	<dyn_history_len>870</dyn_history_len>
+	<dyn_change_rate>0.9865</dyn_change_rate>
+	<use_xbee_11>0</use_xbee_11>
+	<use_xbee_10>0</use_xbee_10>
+	<use_xbee_9>0</use_xbee_9>
+	<nine_dof_to_muscle_xbee_11>0</nine_dof_to_muscle_xbee_11>
+	<nine_dof_to_muscle_xbee_10>0</nine_dof_to_muscle_xbee_10>
+	<nine_dof_to_muscle_xbee_9>0</nine_dof_to_muscle_xbee_9>
+	<nine_dof_muscle_xbee_11>0</nine_dof_muscle_xbee_11>
+	<nine_dof_muscle_xbee_10>0</nine_dof_muscle_xbee_10>
+	<nine_dof_muscle_xbee_9>1</nine_dof_muscle_xbee_9>
+	<dyn_max_change_rate>0.918</dyn_max_change_rate>
+	<use_xbee_12>0</use_xbee_12>
+	<nine_dof_muscle_xbee_12>0</nine_dof_muscle_xbee_12>
+</data_processing>

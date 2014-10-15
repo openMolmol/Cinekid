@@ -12,9 +12,6 @@ void ofApp::setup(){
     SM.setup();
     XM.setup();
     
-    
-    
-    
     ofSoundStreamSetup(2,0,this, 44100, 256, 4);
     
     angle = 0;
@@ -26,8 +23,9 @@ void ofApp::setup(){
     
     bDrawInput = true;
     
-   
-    font.loadFont("OsakaMono.ttf", 55);
+    XM.panel.setPosition(600,30);
+    FM.panel.setPosition(800+20,30);
+    SM.panel.setPosition(1000+40,30);
     
     
     
@@ -40,10 +38,7 @@ void ofApp::setup(){
     co2panel.add(nFramesHighToFire.set("n high frames to fire", 50, 1, 1000));
     
     
-    XM.panel.setPosition(600,30);
-    LC.panel.setPosition(800+20,30);
-    SM.panel.setPosition(1000+40,30);
-    FM.panel.setPosition(600,30 + 400);
+    
     co2panel.setPosition(1000+40, 400);
     
     lastC02event = ofGetElapsedTimeMillis();
@@ -52,55 +47,6 @@ void ofApp::setup(){
     //cout << minutesBetweenC02 << endl;
     //cout << nextC02eventTime << endl;
     //std::exit(0);
-    
-    
-    bDrawHelpScreen = true;
-    
-    
-    buttons[0].setup(100 + (300+25)*0,200+ 200, 300, 100, false, false);
-    buttons[1].setup(100 + (300+25)*1,200+ 200, 300, 100, false, false);
-    buttons[2].setup(100 + (300+25)*2,200+ 200, 300, 100, false, false);
-    
-    
-    buttons[0].setType(TYPE_TOGGLE);
-    buttons[1].setType(TYPE_TOGGLE);
-    buttons[2].setType(TYPE_TOGGLE);
-    
-    buttons[0].setColor(ofColor(180,180,180));
-    buttons[0].setToggleColor(ofColor::green);
-    buttons[1].setColor(ofColor(180,180,180));
-    buttons[1].setToggleColor(ofColor::green);
-    buttons[2].setColor(ofColor(180,180,180));
-    buttons[2].setToggleColor(ofColor::green);
-    
-    buttons[0].setName("use 11");
-    buttons[1].setName("use 10");
-    buttons[2].setName("use 12");
-    
-    
-    
-    co2button.setup(100, 600, 50, 50, false, false);
-   // co2button.setType(TYPE_TOGGLE);
-    co2button.setName("fire co2");
-    lightMode.setup(100+100, 600, 50, 50, false, false);
-    lightMode.setName("light mode");
-    //ofxSimpleButton co2button;
-    //ofxSimpleButton lightMode;
-    
-    
-    co2button.setColor(ofColor::lightGray);
-    co2button.setToggleColor(ofColor::green);
-    
-    lightMode.setColor(ofColor::lightGray);
-    lightMode.setToggleColor(ofColor::green);
-    
-    // fire co2
-    // lights on white
-    // lights off
-    
-    co2lastFrame = false;
-    lightModeLastFrame = false;
-    lightModeNum = 0;
 }
 
 
@@ -110,26 +56,6 @@ static float crazyAngle = 0;
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    
-    
-    if (bDrawHelpScreen){
-        XM.panel.setPosition(-2000+600,30);
-        LC.panel.setPosition(-2000+800+20,30);
-        SM.panel.setPosition(-2000+1000+40,30);
-        FM.panel.setPosition(-2000+600,30 + 400);
-        co2panel.setPosition(-2000+1000+40, 400);
-    } else {
-        XM.panel.setPosition(600,30);
-        LC.panel.setPosition(800+20,30);
-        SM.panel.setPosition(1000+40,30);
-        FM.panel.setPosition(600,30 + 400);
-        co2panel.setPosition(1000+40, 400);
-    }
-    
-    
-    buttons[0].setToggleColor( ofColor( LC.color1->x, LC.color1->y, LC.color1->z ));
-    buttons[1].setToggleColor( ofColor( LC.color2->x, LC.color2->y, LC.color2->z ));
-    buttons[2].setToggleColor( ofColor( LC.color3->x, LC.color3->y, LC.color3->z ));
     
     
     //--------------------------------------------------------------
@@ -201,21 +127,6 @@ void ofApp::update(){
     individEnergy[1] = 0.95f * individEnergy[1]  + 0.05 * XM.statList[1].energy;
     individEnergy[2] = 0.95f * individEnergy[2]  + 0.05 * XM.statList[2].energy;
     
-    
-    bool bUseAnyDevices = false;
-    for (int i = 0; i < 3; i++){
-        if (XM.bUseDevices[i] == true){
-            bUseAnyDevices = true;
-        }
-    }
-    LC.setScreenSaver(!bUseAnyDevices);
-
-    for (int i = 0; i < 3; i++){
-        if (XM.bUseDevices[i]){
-            LC.addEnergy(i,individEnergy[i]);
-        }
-    }
-    
     //--------------------------------------------------------------
     
     
@@ -223,7 +134,7 @@ void ofApp::update(){
     
     if (true){
         FM.setStrength(0, XM.statList[0].energy);
-        FM.setStrength(1, XM.statList[1].energy);
+        FM.setStrength(1,XM.statList[1].energy);
         FM.setStrength(2, XM.statList[2].energy);
     }
     
@@ -235,9 +146,9 @@ void ofApp::update(){
     //-------------------------------------------------------------
     // light
     
-    ofColor a = ofColor(LC.color1->x,LC.color1->y,LC.color1->z); // aqua
-    ofColor b = ofColor(LC.color2->x,LC.color2->y,LC.color2->z); // spring green
-    ofColor c = ofColor(LC.color3->x,LC.color3->y,LC.color3->z);   // violet
+    ofColor a = ofColor(0,250,250); // aqua
+    ofColor b = ofColor(180,255,0); // spring green
+    ofColor c = ofColor(255,80,255);   // violet
     
     ofColor aT = a;
     ofColor bT = b;
@@ -318,17 +229,17 @@ void ofApp::update(){
     
     
     //if (noEnergyChangeEnergy > 0.01){
-//    a.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0 + TWO_PI/4), -1,1,  a.r,  a.r -  a.r * noEnergyChangeEnergy);
-//    a.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/4), -1,1,  a.g,  a.g -  a.g * noEnergyChangeEnergy);
-//    a.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/4), -1,1,  a.b,  a.b -  a.b * noEnergyChangeEnergy);
-//    
-//    b.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.r,  b.r -  b.r * noEnergyChangeEnergy);
-//    b.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.g,  b.g -  b.g * noEnergyChangeEnergy);
-//    b.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.b,  b.b -  b.b * noEnergyChangeEnergy);
-//    
-//    c.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.r,  c.r -  c.r * noEnergyChangeEnergy);
-//    c.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.g,  c.g -  c.g * noEnergyChangeEnergy);
-//    c.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.b,  c.b -  c.b * noEnergyChangeEnergy);
+    a.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0 + TWO_PI/4), -1,1,  a.r,  a.r -  a.r * noEnergyChangeEnergy);
+    a.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/4), -1,1,  a.g,  a.g -  a.g * noEnergyChangeEnergy);
+    a.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/4), -1,1,  a.b,  a.b -  a.b * noEnergyChangeEnergy);
+    
+    b.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.r,  b.r -  b.r * noEnergyChangeEnergy);
+    b.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.g,  b.g -  b.g * noEnergyChangeEnergy);
+    b.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+ TWO_PI/2), -1,1,  b.b,  b.b -  b.b * noEnergyChangeEnergy);
+    
+    c.r = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.r,  c.r -  c.r * noEnergyChangeEnergy);
+    c.g = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.g,  c.g -  c.g * noEnergyChangeEnergy);
+    c.b = ofMap( sin(ofGetElapsedTimeMillis()/1000.0+3*TWO_PI/2), -1,1,  c.b,  c.b -  c.b * noEnergyChangeEnergy);
     
     //}
     
@@ -341,31 +252,6 @@ void ofApp::update(){
     FM.update();
     SM.update();
     
-    
-    bool bCo2Now = co2button.getIsSelect();
-    bool lModeNow = lightMode.getIsSelect();
-    
-    if (bCo2Now == true &&  co2lastFrame == false){
-            // fire c02
-    }
-    
-    if (lModeNow == true &&  lightModeLastFrame == false){
-        // fire c02
-        lightModeNum++;
-        lightModeNum %= 3;
-    }
-    
-    co2lastFrame = co2button.getIsSelect();
-    lightModeLastFrame = lightMode.getIsSelect();
-    
-    cout << lightModeNum << endl;
-//    co2lastFrame = false;
-//    lightModeLastFrame = false;
-//    lightModeNum = 0;
-    
-    //cout << co2button.getIsSelect() <<
-    ;
-    
 }
 
 //--------------------------------------------------------------
@@ -375,85 +261,42 @@ void ofApp::draw(){
     ofBackground(ofColor(100,100,60));
     
     
-    
-    
-    
-    ofPushMatrix();
-        if (bDrawHelpScreen){
-            ofTranslate(-2000,0);
-        } else {
-            ofTranslate(0,0);
-        }
-        ofDrawBitmapString("last c02: " +  ofToString(lastC02event / 1000.0, 3) , 1000+40, 600);
-        int timeTillNext =  nextC02eventTime - ofGetElapsedTimeMillis();
-        if (timeTillNext < 0) timeTillNext = 0;
-        ofDrawBitmapString("seconds till next c02: " +  ofToString(timeTillNext / 1000.0, 3) , 1000+40, 650);
-    
-    
         XM.draw();
+    
         SM.draw();
         FM.draw();
         LC.draw();
-    
-    
-    ofPopMatrix();
-    
-    
-        if (bDrawHelpScreen){
-            
-            if (!buttons[0].getIsToggl()) ofSetColor(255,0,0);
-            if (buttons[0].getIsToggl()) ofSetColor(0,255,0);
-            
-            font.drawString("11", 100, 200 - 40);
-            XM.dataCollectors[0].sets[0].draw( ofRectangle(100,200, 300, 150));
-           
-            if (!buttons[1].getIsToggl()) ofSetColor(255,0,0);
-            if (buttons[1].getIsToggl()) ofSetColor(0,255,0);
-            
-            
-            
-            font.drawString("10", 100 + (300+25)*1, 200-40);
-            XM.dataCollectors[1].sets[0].draw( ofRectangle(100 + (300+25)*1,200, 300, 150));
-            
-            if (!buttons[2].getIsToggl()) ofSetColor(255,0,0);
-            if (buttons[2].getIsToggl()) ofSetColor(0,255,0);
-            
-            
-            font.drawString("12", 100 + (300+25)*2,200-40);
-            XM.dataCollectors[2].sets[0].draw( ofRectangle(100 + (300+25)*2,200, 300, 150));
-            
-            buttons[0].show();
-            buttons[1].show();
-            buttons[2].show();
-            co2button.show();
-            lightMode.show();
-            
-            
-            ofDrawBitmapStringHighlight("regular", ofPoint(100+100+100, 600), lightModeNum == 0 ? ofColor::green : ofColor::black, ofColor::white);
-            ofDrawBitmapStringHighlight("white", ofPoint(100+100+100, 630), lightModeNum == 1 ? ofColor::green : ofColor::black, ofColor::white);
-            ofDrawBitmapStringHighlight("off", ofPoint(100+100+100, 660), lightModeNum == 2 ? ofColor::green : ofColor::black, ofColor::white);
-            
-            
-            
-        } else {
-            buttons[0].hide();
-            buttons[1].hide();
-            buttons[2].hide();
-            co2button.hide();
-            lightMode.hide();
-            
-            
-        }
-    
-    
-    
-    
-  
-    
-    
-    
-    FM.panel.draw();
+        FM.panel.draw();
+
     co2panel.draw();
+    
+        
+    ofDrawBitmapString("last c02: " +  ofToString(lastC02event / 1000.0, 3) , 1000+40, 600);
+    int timeTillNext =  nextC02eventTime - ofGetElapsedTimeMillis();
+    if (timeTillNext < 0) timeTillNext = 0;
+    //cout << ofGetElapsedTimeMillis() << " " << nextC02eventTime << endl;
+    
+    ofDrawBitmapString("seconds till next c02: " +  ofToString(timeTillNext / 1000.0, 3) , 1000+40, 650);
+    
+    
+    //lastC02event = ofGetElapsedTimef();
+    //nextC02eventTime = ofGetElapsedTimeMillis() + minutesBetweenC02 * 60 * 1000;
+    
+
+//    for (int i = 0; i < 12; i++){
+//        float w = ofGetWidth() / 12.0;
+//        ofSetColor(briForScreensaver[i]*255);
+//        ofFill();
+//        ofRect(i*w, 600, w, 20);
+//    
+//        ofSetColor(briForOn[i]*255);
+//        ofFill();
+//        ofRect(i*w, 600+20, w, 20);
+//        
+//        
+//    }
+    
+    
     
     
     
@@ -503,8 +346,6 @@ void ofApp::keyPressed(int key){
         system(cmd.c_str());
         cmd = "mv " +  fileName + ".fix" + " " + fileName;
         system(cmd.c_str());
-        
-        LC.panel.saveToFile("lightSettings.xml");
     }
     
     XM.keyPressed(key);
@@ -514,18 +355,6 @@ void ofApp::keyPressed(int key){
         LC.p[0].addEnergy();
     }
     
-    
-    if (key == 'p'){
-        LC.p[1].addEnergy();
-    }
-    
-    if (key == 'r'){
-        LC.p[2].addEnergy();
-    }
-    
-    if (key == 'd'){
-        bDrawHelpScreen = !bDrawHelpScreen;
-    }
 }
 
 //--------------------------------------------------------------
@@ -547,13 +376,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 void ofApp::mousePressed(int x, int y, int button){
 
     
-    if (bDrawHelpScreen){
-    buttons[0].touchDown(x,y);
-    buttons[1].touchDown(x,y);
-    buttons[2].touchDown(x,y);
-    co2button.touchDown(x,y);
-    lightMode.touchDown(x,y);
-    }
+    
 }
 
 //--------------------------------------------------------------

@@ -8,7 +8,7 @@
 #include "fanManager.h"
 #include "soundManager.h"
 #include "xbeeManager.h"
-#include "ofxSimpleButton.h"
+
 
 class ofApp : public ofBaseApp{
 
@@ -75,21 +75,7 @@ class ofApp : public ofBaseApp{
     
 //
 //
-//
-    
-    ofxSimpleButton buttons[3];
-    
-    ofTrueTypeFont font;
-    
-    bool bDrawHelpScreen;
-    
-    
-    ofxSimpleButton co2button;
-    ofxSimpleButton lightMode;
-    
-    bool co2lastFrame;
-    bool lightModeLastFrame;
-    int lightModeNum;
+//    
     
     
     
